@@ -15,7 +15,7 @@ let setup = {
     minY: 0,
     maxY: 30,
     tiers: 6,
-    totalFreeDrivers: 100,
+    totalDrivers: 100,
     totalTeams: 20,
     seasons: 2
 }
@@ -23,7 +23,7 @@ let setup = {
 function init() {
     // initializeHTML();
     let map = createCircuitMap(setup);
-    start(paddock, setup, map);
+    let startGen = start(paddock, setup, map);
     mapHTML(map, setup, paddock);
 }
 
