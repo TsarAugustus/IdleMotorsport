@@ -1,9 +1,9 @@
 import { generateGrid } from "./generateGrid.js";
 
-function generate(paddock) {
+function generate(paddock, setup) {
     let seasonArray = [];
 
-    if(!paddock.grid) paddock.grid = generateGrid(paddock); 
+    if(!paddock.grid) paddock.grid = generateGrid(paddock, setup); 
 
     for(let i=0; i<paddock.seasons; i++) seasonArray.push(generateSeason(paddock));
 

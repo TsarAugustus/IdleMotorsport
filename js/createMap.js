@@ -13,18 +13,18 @@ function createMap(setup) {
     for(let i=0; i<northHemisphereRegions; i++) regionArray.push({
         region: i, 
         xStart: Math.round(i * xLengthPerNorthRegion),
-        xEnd: Math.round(i * xLengthPerNorthRegion + xLengthPerNorthRegion),
+        xEnd: Math.round(i * xLengthPerNorthRegion + xLengthPerNorthRegion) - 1,
         yStart: setup.minY,
-        yEnd: setup.maxY / 2,
+        yEnd: (setup.maxY / 2) - 1,
         tracks: []
     });
 
     for(let i=0; i<southHemisphereRegions; i++) regionArray.push({
         region: regionArray.length + 1,
         xStart: Math.round(i * xLengthPerSouthRegion),
-        xEnd: Math.round(i * xLengthPerSouthRegion + xLengthPerSouthRegion),
+        xEnd: Math.round(i * xLengthPerSouthRegion + xLengthPerSouthRegion) - 1,
         yStart: setup.maxY / 2,
-        yEnd: setup.maxY,
+        yEnd: setup.maxY - 1,
         tracks: []
     });
     
