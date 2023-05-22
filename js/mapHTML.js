@@ -2,10 +2,9 @@ function mapHTML(map, setup, paddock) {
     let mapElement = createMapElement(setup);
     document.body.appendChild(mapElement);
 
-    map.tracks.forEach(track => addTracksToMap(track));
+    map.circuits.forEach(circuit => addcircuitsToMap(circuit));
     paddock.grid.teams.forEach(team => addTeamsToMap(team));
     paddock.grid.freeDrivers.forEach(driver => addDriversToMap(driver));
-
     map.regions.forEach((region, index) => applyRegionColors(region, index, setup));
     
     let regionList = document.createElement('div');
@@ -20,9 +19,7 @@ function mapHTML(map, setup, paddock) {
 
 function createMapElement(setup) {
     let columns = '';
-    for(let x=0; x<setup.maxX; x++) {
-        columns += '1fr '
-    }
+    for(let x=0; x<setup.maxX; x++) columns += '1fr '
     
     let mapElement = document.createElement('div');
     mapElement.id = 'mapElement';
@@ -51,10 +48,10 @@ function applyMapMarkings(setup, mapElement) {
     }
 }
 
-function addTracksToMap(track) {
-    let item = document.getElementById(`${track.xPosition}-${track.yPosition}`);
-    item.classList.add('track')
-    item.innerHTML = track.tier;
+function addcircuitsToMap(circuit) {
+    let item = document.getElementById(`${circuit.xPosition}-${circuit.yPosition}`);
+    item.classList.add('circuit')
+    item.innerHTML = circuit.tier;
 }
 
 function addTeamsToMap(team) {
@@ -88,19 +85,19 @@ function createRegionList(region) {
     let regionDiv = document.createElement('div');
     regionDiv.id = `Region-${region.region}`;
     let regionName = document.createElement('h3');
-    regionName.innerHTML = `Region ${region.region} - ${region.tracks.length}`;
+    regionName.innerHTML = `Region ${region.region} - ${region.circuits.length}`;
     regionDiv.appendChild(regionName);
 
-    region.tracks.forEach(track => createRegionTrackList(track, regionDiv))
+    region.circuits.forEach(circuit => createRegioncircuitList(circuit, regionDiv))
     
     regionList.appendChild(regionDiv)
 }
 
-function createRegionTrackList(track, regionDiv) {
-    let trackDiv = document.createElement('div');
-    trackDiv.id = `Track-${track.name}`
-    trackDiv.innerHTML = `Track ${track.name}`;
-    regionDiv.appendChild(trackDiv)
+function createRegioncircuitList(circuit, regionDiv) {
+    let circuitDiv = document.createElement('div');
+    circuitDiv.id = `Circuit-${circuit.name}`
+    circuitDiv.innerHTML = `Circuit ${circuit.name}`;
+    regionDiv.appendChild(circuitDiv)
 }
 
 function randomNumber(min, max) {

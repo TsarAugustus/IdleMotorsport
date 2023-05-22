@@ -16,7 +16,7 @@ function createMap(setup) {
         xEnd: Math.round(i * xLengthPerNorthRegion + xLengthPerNorthRegion) - 1,
         yStart: setup.minY,
         yEnd: (setup.maxY / 2) - 1,
-        tracks: []
+        circuits: []
     });
 
     for(let i=0; i<southHemisphereRegions; i++) regionArray.push({
@@ -25,7 +25,7 @@ function createMap(setup) {
         xEnd: Math.round(i * xLengthPerSouthRegion + xLengthPerSouthRegion) - 1,
         yStart: setup.maxY / 2,
         yEnd: setup.maxY - 1,
-        tracks: []
+        circuits: []
     });
     
     return regionArray

@@ -1,8 +1,7 @@
-import { initializeHTML } from "./initializeHTML.js";
-import { createCircuitMap } from "./createCircuitMap.js";
-import { generate } from "./generate.js";
-import { mapHTML } from "./mapHTML.js";
-import { createChampionshipTiers } from "./createChanmpionshipTiers.js";
+import { initializeHTML } from './initializeHTML.js';
+import { createCircuitMap } from './createCircuitMap.js';
+import { generate } from './generate.js';
+import { mapHTML } from './mapHTML.js';
 
 let paddock = {
     
@@ -15,15 +14,14 @@ let setup = {
     maxX: 30,
     minY: 0,
     maxY: 30,
-    tiers: 5,
+    tiers: 6,
     totalFreeDrivers: 100,
-    totalTeams: 100
+    totalTeams: 20
 }
 
 function init() {
     // initializeHTML();
     let map = createCircuitMap(setup);
-    let championshipTiers = createChampionshipTiers(map, setup);
     start(paddock, setup, map);
     mapHTML(map, setup, paddock);
 }
@@ -31,7 +29,6 @@ function init() {
 function start(paddock, setup, map) {
     // let state = document.getElementById('gameEnabledButton').checked;
     // if(state) console.log('Start with Player')
-
     paddock.result = generate(paddock, setup, map);
 
     return paddock

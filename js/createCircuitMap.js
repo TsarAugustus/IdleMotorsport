@@ -6,15 +6,15 @@ function createCircuitMap(setup) {
     let map = createMap(setup);
     for(let i=0; i<setup.circuitsToGenerate; i++) circuitArray.push(createCircuit(i, map, setup));
 
-    let trackTiers = {};
-    circuitArray.forEach(track => {
-        if(!trackTiers[track.tier]) trackTiers[track.tier] = [];
-        trackTiers[track.tier].push(track);
+    let circuitTiers = {};
+    circuitArray.forEach(circuit => {
+        if(!circuitTiers[circuit.tier]) circuitTiers[circuit.tier] = [];
+        circuitTiers[circuit.tier].push(circuit);
     });
 
-    let trackTiersValues = Object.values(trackTiers);
+    let circuitTiersValues = Object.values(circuitTiers);
 
-    return {tracks: circuitArray, regions: map, tiers: trackTiers};
+    return {circuits: circuitArray, regions: map, trackTiers: circuitTiers};
 }
 
 export { createCircuitMap }
