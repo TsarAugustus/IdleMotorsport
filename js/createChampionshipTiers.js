@@ -1,17 +1,17 @@
 function createChampionshipTiers(map, setup, paddock) {
     let tiers = [];
-
+    
     for(let i=0; i<setup.tiers; i++) {
         let thisTier = {
             tier: i + 1,
-            tracks: map.trackTiers[i + 1],
+            circuits: map.circuitTiers[i + 1],
             drivers: []
         }
         
-        paddock.grid.freeDrivers.forEach(driver => {
+        paddock.grid.drivers.forEach(driver => {
             if(driver.tier === thisTier.tier) {
                 thisTier.drivers.push(driver);
-                paddock.grid.freeDrivers = paddock.grid.freeDrivers.filter(freeDriver => freeDriver.name !== driver.name)
+                paddock.grid.drivers = paddock.grid.drivers.filter(thisDriver => thisDriver.name !== driver.name)
             }
         });
         

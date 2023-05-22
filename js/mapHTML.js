@@ -4,7 +4,7 @@ function mapHTML(map, setup, paddock) {
 
     map.circuits.forEach(circuit => addcircuitsToMap(circuit));
     paddock.grid.teams.forEach(team => addTeamsToMap(team));
-    paddock.grid.freeDrivers.forEach(driver => addDriversToMap(driver));
+    paddock.grid.drivers.forEach(driver => addDriversToMap(driver));
     map.regions.forEach((region, index) => applyRegionColors(region, index, setup));
     
     let regionList = document.createElement('div');
@@ -95,8 +95,8 @@ function createRegionList(region) {
 
 function createRegioncircuitList(circuit, regionDiv) {
     let circuitDiv = document.createElement('div');
-    circuitDiv.id = `Circuit-${circuit.name}`
-    circuitDiv.innerHTML = `Circuit ${circuit.name}`;
+    circuitDiv.id = `${circuit.name}`
+    circuitDiv.innerHTML = `${circuit.name}`;
     regionDiv.appendChild(circuitDiv)
 }
 

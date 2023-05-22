@@ -16,7 +16,8 @@ let setup = {
     maxY: 30,
     tiers: 6,
     totalFreeDrivers: 100,
-    totalTeams: 20
+    totalTeams: 20,
+    seasons: 2
 }
 
 function init() {

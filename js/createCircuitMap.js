@@ -12,9 +12,7 @@ function createCircuitMap(setup) {
         circuitTiers[circuit.tier].push(circuit);
     });
 
-    let circuitTiersValues = Object.values(circuitTiers);
-
-    return {circuits: circuitArray, regions: map, trackTiers: circuitTiers};
+    return {circuits: circuitArray, regions: map, circuitTiers: circuitTiers};
 }
 
 export { createCircuitMap }

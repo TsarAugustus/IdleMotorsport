@@ -1,21 +1,21 @@
 import { generateGrid } from './generateGrid.js';
-import { createChampionshipTiers } from './createChanmpionshipTiers.js';
+import { createChampionshipTiers } from './createChampionshipTiers.js';
 
 function generate(paddock, setup, map) {
     let seasonArray = [];
 
     if(!paddock.grid) paddock.grid = generateGrid(paddock, setup, map); 
 
-    let championshipTiers = createChampionshipTiers(map, setup, paddock);
-
-    for(let i=0; i<paddock.seasons; i++) seasonArray.push(generateSeason(paddock));
+    
+    for(let i=0; i<setup.seasons; i++) seasonArray.push(generateSeason(paddock, map, setup));
 
     return seasonArray;
 }
 
-function generateSeason(paddock) {
+function generateSeason(paddock, map, setup) {
     let season = {};
-
+    let championshipTiers = createChampionshipTiers(map, setup, paddock);
+    
     return season;
 }
 
