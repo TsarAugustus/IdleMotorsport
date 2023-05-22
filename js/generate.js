@@ -12,7 +12,12 @@ function generate(paddock, setup, map) {
 function generateSeason(paddock, map, setup) {
     let season = {};
     let championshipTiers = createChampionshipTiers(map, setup, paddock);
-    
+
+    //For testing at the moment
+    championshipTiers.forEach(tier => {
+        if(tier.tier > 1) tier.drivers.forEach(driver => driver.tier--)
+    });
+
     return season;
 }
 

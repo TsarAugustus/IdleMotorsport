@@ -57,13 +57,11 @@ function addcircuitsToMap(circuit) {
 function addTeamsToMap(team) {
     let item = document.getElementById(`${team.xPosition}-${team.yPosition}`);
     item.classList.add('team');
-    // item.style.border = '1px solid red';
 }
 
 function addDriversToMap(driver) {
     let item = document.getElementById(`${driver.xPosition}-${driver.yPosition}`);
     item.classList.add('driver');
-    // item.style['background-color'] = 'darkgrey !important';
 }
 
 function applyRegionColors(region, index, setup) {

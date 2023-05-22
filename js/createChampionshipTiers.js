@@ -17,7 +17,7 @@ function createChampionshipTiers(map, setup, paddock) {
         
         tiers.push(thisTier)
     }
-
+    
     return tiers
 }
 

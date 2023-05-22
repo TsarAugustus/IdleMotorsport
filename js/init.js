@@ -23,7 +23,7 @@ let setup = {
 function init() {
     // initializeHTML();
     let map = createCircuitMap(setup);
-    let startGen = start(paddock, setup, map);
+    start(paddock, setup, map);
     mapHTML(map, setup, paddock);
 }
 
