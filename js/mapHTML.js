@@ -3,28 +3,16 @@ function mapHTML(map, setup, paddock) {
     document.body.appendChild(mapElement);
 
     map.tracks.forEach(track => addTracksToMap(track));
+    paddock.grid.teams.forEach(team => addTeamsToMap(team));
+    paddock.grid.freeDrivers.forEach(driver => addDriversToMap(driver));
 
     map.regions.forEach((region, index) => applyRegionColors(region, index, setup));
-
+    
     let regionList = document.createElement('div');
     regionList.id = 'regionList';
+    document.body.appendChild(regionList)
 
-    map.regions.forEach(region => {
-        let regionDiv = document.createElement('div');
-        regionDiv.id = `Region-${region.region}`;
-        let regionName = document.createElement('h3');
-        regionName.innerHTML = `Region ${region.region} - ${region.tracks.length}`;
-        regionDiv.appendChild(regionName);
-
-        region.tracks.forEach(track => {
-            let trackDiv = document.createElement('div');
-            trackDiv.id = `Track-${track.name}`
-            trackDiv.innerHTML = `Track ${track.name}`;
-            regionDiv.appendChild(trackDiv)
-        })
-        
-        regionList.appendChild(regionDiv)
-    });
+    map.regions.forEach(region => createRegionList(region));
 
     document.body.appendChild(regionList)
 
@@ -65,8 +53,20 @@ function applyMapMarkings(setup, mapElement) {
 
 function addTracksToMap(track) {
     let item = document.getElementById(`${track.xPosition}-${track.yPosition}`);
-    item.classList.add('track');
-    item.innerHTML = '#'
+    item.classList.add('track')
+    item.innerHTML = track.tier;
+}
+
+function addTeamsToMap(team) {
+    let item = document.getElementById(`${team.xPosition}-${team.yPosition}`);
+    item.classList.add('team');
+    // item.style.border = '1px solid red';
+}
+
+function addDriversToMap(driver) {
+    let item = document.getElementById(`${driver.xPosition}-${driver.yPosition}`);
+    item.classList.add('driver');
+    // item.style['background-color'] = 'darkgrey !important';
 }
 
 function applyRegionColors(region, index, setup) {
@@ -78,10 +78,29 @@ function applyRegionColors(region, index, setup) {
             let yLimit = y >= region.yStart && y <= region.yEnd;
 
             if(xLimit && yLimit) {
-                document.getElementById(`${x}-${y}`).style.color = regionColor;
+                document.getElementById(`${x}-${y}`).style['background-color'] = regionColor;
             }
         }
     } 
+}
+
+function createRegionList(region) {
+    let regionDiv = document.createElement('div');
+    regionDiv.id = `Region-${region.region}`;
+    let regionName = document.createElement('h3');
+    regionName.innerHTML = `Region ${region.region} - ${region.tracks.length}`;
+    regionDiv.appendChild(regionName);
+
+    region.tracks.forEach(track => createRegionTrackList(track, regionDiv))
+    
+    regionList.appendChild(regionDiv)
+}
+
+function createRegionTrackList(track, regionDiv) {
+    let trackDiv = document.createElement('div');
+    trackDiv.id = `Track-${track.name}`
+    trackDiv.innerHTML = `Track ${track.name}`;
+    regionDiv.appendChild(trackDiv)
 }
 
 function randomNumber(min, max) {

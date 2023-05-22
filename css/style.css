@@ -1,3 +1,11 @@
 .track {
-    color: black !important;
+
+}
+
+.team {
+    border: 1px solid black;
+}
+
+.driver {
+    background-color: green !important;
 }
