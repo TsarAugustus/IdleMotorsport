@@ -6,7 +6,8 @@ function generateTeams(i, setup, map) {
         xPosition: randomNumber(setup.minX, setup.maxX - 1),
         yPosition: randomNumber(setup.minY, setup.maxY - 1),
         region: {},
-        drivers: []
+        drivers: [],
+        active: false
     }
 
     map.regions.forEach(region => getTeamRegion(region, team));

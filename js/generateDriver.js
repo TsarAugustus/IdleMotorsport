@@ -5,7 +5,8 @@ function generateDriver(num, setup, map) {
         xPosition: randomNumber(setup.minX, setup.maxX - 1),
         yPosition: randomNumber(setup.minY, setup.maxY - 1),
         region: {},
-        team: {}
+        team: {},
+        active: false
     };
 
     map.regions.forEach(region => getDriverRegion(region, driver));

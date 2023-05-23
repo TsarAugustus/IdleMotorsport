@@ -5,20 +5,37 @@ function createChampionshipTiers(map, setup, paddock) {
         let thisTier = {
             tier: i + 1,
             circuits: map.circuitTiers[i + 1],
-            drivers: []
+            drivers: [],
+            teams: [],
+            faculty: [],
+            regulations: {}
         }
         
+        //Very redundant
         paddock.grid.drivers.forEach(driver => {
-            if(driver.tier === thisTier.tier) {
-                thisTier.drivers.push(driver);
-                // paddock.grid.drivers = paddock.grid.drivers.filter(thisDriver => thisDriver.name !== driver.name)
-            }
+            if(driver.tier === thisTier.tier) thisTier.drivers.push(driver);
         });
+
+        paddock.grid.teams.forEach(team => {
+            if(team.tier === thisTier.tier) thisTier.teams.push(team)
+        });
+
+        paddock.grid.faculty.forEach(member => {
+            if(member.tier === thisTier.tier) thisTier.faculty.push(member)
+        })
+
+        thisTier.regulations = createTierRegulations(thisTier);
         
         tiers.push(thisTier)
     }
-    
+
     return tiers
+}
+
+function createTierRegulations(tier) {
+    let regulations = {};
+
+    return regulations;
 }
 
 export { createChampionshipTiers }

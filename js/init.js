@@ -14,10 +14,13 @@ let setup = {
     maxX: 30,
     minY: 0,
     maxY: 30,
-    tiers: 6,
+    tiers: 1,
     totalDrivers: 100,
-    totalTeams: 20,
-    seasons: 2
+    totalTeams: 10,
+    driversPerTeam: 1,
+    totalFaculty: 100,
+    totalFacultyType: 1,
+    seasons: 1
 }
 
 function init() {
