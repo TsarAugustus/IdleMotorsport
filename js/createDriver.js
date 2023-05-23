@@ -10,7 +10,6 @@ function createDriver(num, setup, map) {
     };
 
     map.regions.forEach(region => getDriverRegion(region, driver));
-    
     return driver;
 }
 

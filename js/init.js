@@ -8,17 +8,17 @@ let paddock = {
 };
 
 let setup = {
-    circuitsToGenerate: 100,
+    circuitsToGenerate: 1,
     regionCount: 5,
     minX: 0,
     maxX: 30,
     minY: 0,
     maxY: 30,
     tiers: 1,
-    totalDrivers: 100,
+    totalDrivers: 1,
     totalTeams: 10,
     driversPerTeam: 1,
-    totalFaculty: 100,
+    totalFaculty: 50,
     totalFacultyType: 1,
     seasons: 1
 }

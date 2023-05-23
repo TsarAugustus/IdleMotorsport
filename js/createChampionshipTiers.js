@@ -12,17 +12,9 @@ function createChampionshipTiers(map, setup, paddock) {
         }
         
         //Very redundant
-        paddock.grid.drivers.forEach(driver => {
-            if(driver.tier === thisTier.tier) thisTier.drivers.push(driver);
-        });
-
-        paddock.grid.teams.forEach(team => {
-            if(team.tier === thisTier.tier) thisTier.teams.push(team)
-        });
-
-        paddock.grid.faculty.forEach(member => {
-            if(member.tier === thisTier.tier) thisTier.faculty.push(member)
-        })
+        paddock.grid.drivers.forEach(driver => driver.tier === thisTier.tier ? thisTier.drivers.push(driver) : '');
+        paddock.grid.teams.forEach(team => team.tier === thisTier.tier ? thisTier.teams.push(team) : '');
+        paddock.grid.faculty.forEach(member => member.tier === thisTier.tier ? thisTier.faculty.push(member) : '')
 
         thisTier.regulations = createTierRegulations(thisTier);
         
