@@ -71,13 +71,12 @@ function attemptTeamConstruction(ceo, tier, setup, facultyTypes) {
         team.drivers = drivers
 
         ceo.active = true;
-        faculty.forEach(member => member.active = true);
-        drivers.forEach(driver => driver.active = true);
-
+        ceo.region = team.region;
         ceo.xPosition = team.xPosition;
         ceo.yPosition = team.yPosition;
-        faculty.forEach(member => { member.xPosition = team.xPosition; member.yPosition = team.yPosition });
-        drivers.forEach(driver => { driver.xPosition = team.xPosition; driver.yPosition = team.yPosition});
+
+        faculty.forEach(member => { member.active = true; member.xPosition = team.xPosition; member.yPosition = team.yPosition; member.region = team.region; });
+        drivers.forEach(driver => { driver.active = true; driver.xPosition = team.xPosition; driver.yPosition = team.yPosition; drivers.region = team.region; });
     }
 
     return team;
