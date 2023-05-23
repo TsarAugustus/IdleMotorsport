@@ -7,7 +7,7 @@ let facultyTypes = {
     STRATEGIST: createSTRATEGIST
 }
 
-function generateFaculty(num, setup) {
+function createFaculty(num, setup) {
     let member = createMember(facultyTypes, setup, num);
 
     return member;
@@ -81,4 +81,4 @@ function randomNumber(min, max) {
     return Math.round(Math.random() * (max - min) + min);
 }
 
-export { generateFaculty };
+export { createFaculty };

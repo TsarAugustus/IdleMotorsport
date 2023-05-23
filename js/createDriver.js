@@ -1,4 +1,4 @@
-function generateDriver(num, setup, map) {
+function createDriver(num, setup, map) {
     let driver = {
         name: `Driver ${num + 1}`,
         tier: setup.tiers,
@@ -28,4 +28,4 @@ function randomNumber(min, max) {
     return Math.round(Math.random() * (max - min) + min);
 }
 
-export { generateDriver }
+export { createDriver }
