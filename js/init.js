@@ -1,7 +1,9 @@
-import { initializeHTML } from './initializeHTML.js';
-import { createCircuitMap } from './createCircuitMap.js';
-import { generate } from './generate.js';
 import { mapHTML } from './mapHTML.js';
+import { createMap } from "./createMap.js";
+import { generate } from './generate.js';
+import { generateGrid } from './generateGrid.js';
+import { createCircuitMap } from './createCircuitMap.js';
+// import { initializeHTML } from './initializeHTML.js';
 
 let paddock = {
     
@@ -9,11 +11,11 @@ let paddock = {
 
 let setup = {
     circuitsToGenerate: 1,
-    regionCount: 5,
+    regionCount: 4,
     minX: 0,
-    maxX: 30,
+    maxX: 6,
     minY: 0,
-    maxY: 30,
+    maxY: 6,
     tiers: 1,
     totalDrivers: 1,
     totalTeams: 10,
@@ -25,15 +27,17 @@ let setup = {
 
 function init() {
     // initializeHTML();
-    let map = createCircuitMap(setup);
-    start(paddock, setup, map);
-    mapHTML(map, setup, paddock);
+    let worldMap = createMap(setup);
+    start(worldMap, setup);
+    mapHTML(worldMap, setup, paddock);
 }
 
-function start(paddock, setup, map) {
+function start(worldMap, setup) {
     // let state = document.getElementById('gameEnabledButton').checked;
     // if(state) console.log('Start with Player')
-    paddock.result = generate(paddock, setup, map);
+    paddock.circuits = createCircuitMap(worldMap, setup);
+    paddock.grid = generateGrid(worldMap, setup);
+    paddock.result = generate(worldMap, setup);
 
     return paddock
 }

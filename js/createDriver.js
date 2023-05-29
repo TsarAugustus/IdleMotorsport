@@ -1,4 +1,4 @@
-function createDriver(num, setup, map) {
+function createDriver(worldMap, setup, num) {
     let driver = {
         name: `Driver ${num + 1}`,
         tier: setup.tiers,
@@ -9,18 +9,12 @@ function createDriver(num, setup, map) {
         active: false
     };
 
-    map.regions.forEach(region => getDriverRegion(region, driver));
+    worldMap.forEach(area => getDriverRegion(area, driver));
     return driver;
 }
 
-function getDriverRegion(region, driver) {
-    let xConditions = region.xStart <= driver.xPosition && region.xEnd >= driver.xPosition;
-    let yConditions = region.yStart <= driver.yPosition && region.yEnd >= driver.yPosition
-    if(xConditions && yConditions) { 
-        driver.region = region; 
-        if(!region.drivers) region.drivers = [];
-        region.drivers.push(driver);
-    }
+function getDriverRegion(area, driver) {
+    if(area.xPosition === driver.xPosition && area.yPosition === driver.yPosition) driver.region = area.region
 }
 
 function randomNumber(min, max) {

@@ -4,31 +4,70 @@ function createMap(setup) {
     let regionCount = setup.regionCount;
     let xLength = setup.minX + setup.maxX;
     let yLength = setup.minY + setup.maxY;
-    let northHemisphereRegions = Math.round(regionCount / 2) - (randomNumber(0, 1));
-    let southHemisphereRegions = regionCount - northHemisphereRegions;
-    let xLengthPerNorthRegion = xLength / northHemisphereRegions;
-    let xLengthPerSouthRegion = xLength / southHemisphereRegions;
+    let maxRegionArea = Math.round((xLength * yLength) / regionCount);
+    let mapArea = createMapArea(xLength, yLength);
+
+    for(let i=0; i<regionCount; i++){
+        let capital = getCapital(mapArea, i);
+
+        let newRegion = createRegion(capital, mapArea, i, maxRegionArea);
+        newRegion.capital = capital;
+
+        regionArray.push(newRegion);
+    }
     
-    //TODO: Condense into a single loop, or function
-    for(let i=0; i<northHemisphereRegions; i++) regionArray.push({
-        region: i, 
-        xStart: Math.round(i * xLengthPerNorthRegion),
-        xEnd: Math.round(i * xLengthPerNorthRegion + xLengthPerNorthRegion) - 1,
-        yStart: setup.minY,
-        yEnd: (setup.maxY / 2) - 1,
-        circuits: []
+    return mapArea
+}
+
+function createRegion(capital, mapArea, num, maxRegionArea) {
+    let thisRegion = [];
+    let lastRegion = {};
+
+    if(!lastRegion.region) lastRegion = capital;
+    for(let i=0; i<maxRegionArea; i++) {
+        let availableRegion = checkRegion(lastRegion, mapArea, num);
+        if(availableRegion.circuits) {
+            availableRegion.region = `Region ${num}`;
+            lastRegion = availableRegion;
+            thisRegion.push(availableRegion);
+        }
+    }
+
+    return thisRegion;
+}
+
+function checkRegion(lastRegion, mapArea, num) {
+    let thisArea = {};
+
+    mapArea.forEach(area => {
+        if      (!area.region && lastRegion.xPosition + 1 === area.xPosition && lastRegion.yPostion === area.yPostion) { thisArea = area; }
+        else if (!area.region && lastRegion.xPosition - 1 === area.xPosition && lastRegion.yPostion === area.yPostion) { thisArea = area; }
+        else if (!area.region && lastRegion.xPosition + 1 === area.yPosition && lastRegion.xPostion === area.xPostion) { thisArea = area; }
+        else if (!area.region && lastRegion.yPosition - 1 === area.yPosition && lastRegion.xPostion === area.xPostion) { thisArea = area; }
+        else if(!area.region) { thisArea = area; }
     });
 
-    for(let i=0; i<southHemisphereRegions; i++) regionArray.push({
-        region: regionArray.length + 1,
-        xStart: Math.round(i * xLengthPerSouthRegion),
-        xEnd: Math.round(i * xLengthPerSouthRegion + xLengthPerSouthRegion) - 1,
-        yStart: setup.maxY / 2,
-        yEnd: setup.maxY - 1,
-        circuits: []
-    });
-    
-    return regionArray
+    return thisArea;
+}
+
+function getCapital(mapArea, num) {
+    let randomRegion = mapArea[randomNumber(0, mapArea.length)];
+    if(randomRegion && !randomRegion.region) randomRegion.region = `Region ${num}`;
+    else randomRegion = getCapital(mapArea, num)
+
+    return randomRegion
+}
+
+function createMapArea(xLength, yLength) {
+    let mapArray = [];
+    for(let i=0; i<yLength; i++) for(let ii=0; ii<xLength; ii++) mapArray.push({
+        xPosition: i,
+        yPosition: ii,
+        circuits: [],
+        region: undefined
+    })
+
+    return mapArray;
 }
 
 function randomNumber(min, max) {

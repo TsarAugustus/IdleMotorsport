@@ -1,6 +1,6 @@
-function generateTeams(i, setup, map) {
+function generateTeams(worldMap, setup, num) {
     let team = {
-        name: `Team ${i + 1}`,
+        name: `Team ${num + 1}`,
         // tier: randomNumber(1, setup.tiers),
         tier: setup.tiers,
         xPosition: randomNumber(setup.minX, setup.maxX - 1),
@@ -10,20 +10,13 @@ function generateTeams(i, setup, map) {
         active: false
     }
 
-    map.regions.forEach(region => getTeamRegion(region, team));
-
+    worldMap.forEach(area => getTeamRegion(area, team));
+    
     return team;
 }
 
-function getTeamRegion(region, team) {
-    let xConditions = region.xStart <= team.xPosition && region.xEnd >= team.xPosition;
-    let yConditions = region.yStart <= team.yPosition && region.yEnd >= team.yPosition;
-
-    if(xConditions && yConditions) { 
-        team.region = region; 
-        if(!region.teams) region.teams = [];
-        region.teams.push(team);
-    }
+function getTeamRegion(area, team) {
+    if(area.xPosition === team.xPosition && area.yPosition === team.yPosition) team.region = area.region
 }
 
 function randomNumber(min, max) {

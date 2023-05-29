@@ -1,18 +1,16 @@
-import { createMap } from "./createMap.js";
 import { createCircuit } from "./createCircuit.js";
 
-function createCircuitMap(setup) {
+function createCircuitMap(worldMap, setup) {
     let circuitArray = [];
-    let map = createMap(setup);
-    for(let i=0; i<setup.circuitsToGenerate; i++) circuitArray.push(createCircuit(i, map, setup));
+    for(let i=0; i<setup.circuitsToGenerate; i++) circuitArray.push(createCircuit(i, worldMap, setup));
 
     let circuitTiers = {};
     circuitArray.forEach(circuit => {
         if(!circuitTiers[circuit.tier]) circuitTiers[circuit.tier] = [];
         circuitTiers[circuit.tier].push(circuit);
     });
-
-    return {circuits: circuitArray, regions: map, circuitTiers: circuitTiers};
+    
+    return {circuits: circuitArray, circuitTiers: circuitTiers};
 }
 
 export { createCircuitMap }
