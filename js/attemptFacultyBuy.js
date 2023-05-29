@@ -1,15 +1,14 @@
 function attemptFacultyBuy(type, facultyArray) {
     let facultyOfType = facultyArray.filter(member => member.type === type);
-
+    
     let member = {};
     let potentialMember = {};
 
     //MAKE SURE FACULTY HAVE AN ORIGINAL X/Y POSITION TO REFER TO
     //MAKE FACULTY MOVE TO TEAM X/Y POSITION
     facultyOfType.forEach(thisMember => potentialMember = facultyCheck(potentialMember, thisMember));
-
+    
     member = potentialMember;
-
     return member;
 }
 

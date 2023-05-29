@@ -11,7 +11,7 @@ function createMap(setup) {
         let capital = getCapital(mapArea, i);
 
         let newRegion = createRegion(capital, mapArea, i, maxRegionArea);
-        newRegion.capital = capital;
+        // newRegion.capital = capital;
 
         regionArray.push(newRegion);
     }
@@ -23,10 +23,10 @@ function createRegion(capital, mapArea, num, maxRegionArea) {
     let thisRegion = [];
     let lastRegion = {};
 
-    if(!lastRegion.region) lastRegion = capital;
+    if(!lastRegion.region) { lastRegion = capital; lastRegion.capital = true};
     for(let i=0; i<maxRegionArea; i++) {
-        let availableRegion = checkRegion(lastRegion, mapArea, num);
-        if(availableRegion.circuits) {
+        let availableRegion = checkRegion(lastRegion, mapArea);
+        if(availableRegion) {
             availableRegion.region = `Region ${num}`;
             lastRegion = availableRegion;
             thisRegion.push(availableRegion);
@@ -36,16 +36,20 @@ function createRegion(capital, mapArea, num, maxRegionArea) {
     return thisRegion;
 }
 
-function checkRegion(lastRegion, mapArea, num) {
+function checkRegion(lastRegion, mapArea) {
     let thisArea = {};
-
     mapArea.forEach(area => {
-        if      (!area.region && lastRegion.xPosition + 1 === area.xPosition && lastRegion.yPostion === area.yPostion) { thisArea = area; }
-        else if (!area.region && lastRegion.xPosition - 1 === area.xPosition && lastRegion.yPostion === area.yPostion) { thisArea = area; }
-        else if (!area.region && lastRegion.xPosition + 1 === area.yPosition && lastRegion.xPostion === area.xPostion) { thisArea = area; }
-        else if (!area.region && lastRegion.yPosition - 1 === area.yPosition && lastRegion.xPostion === area.xPostion) { thisArea = area; }
-        else if(!area.region) { thisArea = area; }
+        if      (!area.region) { thisArea = area }
+        else if (!area.region) { thisArea = area }
+        else if (!area.region) { thisArea = area }
+        else if (!area.region) { thisArea = area }
+        else if (!area.region) { thisArea = area }
     });
+    
+    //FOR A MORE RANDOM WORLD
+    //CHANGE thisArea = area TO options.push(area) 
+    // let options = [];
+    // if(options.length > 0) thisArea = options[randomNumber(0, options.length - 1)];
 
     return thisArea;
 }

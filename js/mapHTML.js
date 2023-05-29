@@ -21,11 +21,13 @@ function mapHTML(worldMap, setup, paddock) {
 function addTeamsToMap(team) {
     let item = document.getElementById(`${team.xPosition}-${team.yPosition}`);
     item.classList.add('team');
+    item.innerHTML = 'T'
 }
 
 function addDriversToMap(driver) {
     let item = document.getElementById(`${driver.xPosition}-${driver.yPosition}`);
     item.classList.add('driver');
+    item.innerHTML = 'D';
 }
 
 function addcircuitsToMap(circuit) {
@@ -75,86 +77,13 @@ function applyMapMarkings(setup, mapElement) {
 }
 
 function applyRegionColors(area, regionColorList) {
-
     let areaElement = document.getElementById(`${area.xPosition}-${area.yPosition}`);
-    // console.log(area.region, regionColorList)
+    if(area.capital) { areaElement.classList.add('capital'); areaElement.innerHTML = 'C'; }
     areaElement.style['background-color'] = regionColorList[area.region];
-    // area.forEach(area => {
-    //     // console.log(area, region)
-    // })
 }
 
 function randomNumber(min, max) {
     return Math.round(Math.random() * (max - min) + min);
 }
-
-// function mapHTML(map, setup, paddock, worldMap) {
-//     let mapElement = createMapElement(setup);
-//     document.body.appendChild(mapElement);
-
-//     map.circuits.forEach(circuit => addcircuitsToMap(circuit));
-//     paddock.grid.teams.forEach(team => addTeamsToMap(team));
-//     paddock.grid.drivers.forEach(driver => addDriversToMap(driver));
-//     map.regions.forEach((region, index) => applyRegionColors(region, index, setup));
-    
-//     let regionList = document.createElement('div');
-//     regionList.id = 'regionList';
-//     document.body.appendChild(regionList)
-
-//     map.regions.forEach(region => createRegionList(region));
-
-//     document.body.appendChild(regionList)
-
-// }
-
-// function addcircuitsToMap(circuit) {
-//     let item = document.getElementById(`${circuit.xPosition}-${circuit.yPosition}`);
-//     item.classList.add('circuit')
-//     item.innerHTML = circuit.tier;
-// }
-
-// function addTeamsToMap(team) {
-//     let item = document.getElementById(`${team.xPosition}-${team.yPosition}`);
-//     item.classList.add('team');
-// }
-
-// function addDriversToMap(driver) {
-//     let item = document.getElementById(`${driver.xPosition}-${driver.yPosition}`);
-//     item.classList.add('driver');
-// }
-
-// function applyRegionColors(region, index, setup) {
-//     let regionColor = `rgb(${randomNumber(0, 255)}, ${randomNumber(0, 255)}, ${randomNumber(0, 255)})`;
-    
-//     // for(let y=0; y<setup.maxY; y++) {
-//     //     for(let x=0; x<setup.maxX; x++) {
-//     //         let xLimit = x >= region.xStart && x <= region.xEnd;
-//     //         let yLimit = y >= region.yStart && y <= region.yEnd;
-
-//     //         if(xLimit && yLimit) {
-//     //             document.getElementById(`${x}-${y}`).style['background-color'] = regionColor;
-//     //         }
-//     //     }
-//     // } 
-// }
-
-// function createRegionList(region) {
-//     let regionDiv = document.createElement('div');
-//     regionDiv.id = `Region-${region.region}`;
-//     let regionName = document.createElement('h3');
-//     regionName.innerHTML = `Region ${region.region} - ${region.circuits.length}`;
-//     regionDiv.appendChild(regionName);
-
-//     region.circuits.forEach(circuit => createRegioncircuitList(circuit, regionDiv))
-    
-//     regionList.appendChild(regionDiv)
-// }
-
-// function createRegioncircuitList(circuit, regionDiv) {
-//     let circuitDiv = document.createElement('div');
-//     circuitDiv.id = `${circuit.name}`
-//     circuitDiv.innerHTML = `${circuit.name}`;
-//     regionDiv.appendChild(circuitDiv)
-// }
 
 export { mapHTML }

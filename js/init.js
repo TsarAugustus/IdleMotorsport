@@ -10,14 +10,14 @@ let paddock = {
 };
 
 let setup = {
-    circuitsToGenerate: 1,
-    regionCount: 4,
+    circuitsToGenerate: 100,
+    regionCount: 5,
     minX: 0,
-    maxX: 6,
+    maxX: 30,
     minY: 0,
-    maxY: 6,
-    tiers: 1,
-    totalDrivers: 1,
+    maxY: 30,
+    tiers: 5,
+    totalDrivers: 50,
     totalTeams: 10,
     driversPerTeam: 1,
     totalFaculty: 50,
@@ -37,7 +37,7 @@ function start(worldMap, setup) {
     // if(state) console.log('Start with Player')
     paddock.circuits = createCircuitMap(worldMap, setup);
     paddock.grid = generateGrid(worldMap, setup);
-    paddock.result = generate(worldMap, setup);
+    paddock.result = generate(worldMap, setup, paddock);
 
     return paddock
 }
