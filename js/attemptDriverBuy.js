@@ -1,11 +1,12 @@
-function attemptDriverBuy(driverArray) {
+function attemptDriverBuy(team, tier) {
     let driver = {};
     let potentialDriver = {};
 
-    driverArray.forEach(thisDriver => potentialDriver = driverCheck(potentialDriver, thisDriver));
+    tier.availableDrivers.forEach(thisDriver => potentialDriver = driverCheck(potentialDriver, thisDriver));
     
     driver = potentialDriver;
-    
+
+    if(driver.name) tier.availableDrivers.filter(thisDriver => thisDriver.name !== driver.name);
     return driver;
 }
 
