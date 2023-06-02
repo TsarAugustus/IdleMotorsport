@@ -1,64 +1,65 @@
 function createMap(setup) {
     let regionArray = [];
-
     let regionCount = setup.regionCount;
     let xLength = setup.minX + setup.maxX;
     let yLength = setup.minY + setup.maxY;
     let maxRegionArea = Math.round((xLength * yLength) / regionCount);
     let mapArea = createMapArea(xLength, yLength);
-
-    for(let i=0; i<regionCount; i++){
-        let capital = getCapital(mapArea, i);
-
-        let newRegion = createRegion(capital, mapArea, i, maxRegionArea);
-        // newRegion.capital = capital;
-
-        regionArray.push(newRegion);
-    }
+    // mapArea.forEach(area => area.region = undefined); 
     
-    return mapArea
+    for(let i=0; i<regionCount; i++) { regionArray.push(createRegion(mapArea, maxRegionArea, i)) }
+    
+    if(checkMapArea(mapArea) === false) { 
+        // console.log('here')
+        createMap(setup);
+    } else return mapArea  
+    // console.log(mapArea)
 }
 
-function createRegion(capital, mapArea, num, maxRegionArea) {
-    let thisRegion = [];
-    let lastRegion = {};
+function checkMapArea(mapArea) {
+    let bool = true;
+    mapArea.forEach(area => {
+        if(area.region === undefined) bool = false;
+    })
 
-    if(!lastRegion.region) { lastRegion = capital; lastRegion.capital = true};
-    for(let i=0; i<maxRegionArea; i++) {
-        let availableRegion = checkRegion(lastRegion, mapArea);
-        if(availableRegion) {
-            availableRegion.region = `Region ${num}`;
-            lastRegion = availableRegion;
-            thisRegion.push(availableRegion);
-        }
-    }
+    // if(bool !== false) bool = true;
+    // mapArea.forEach(area => area.region === undefined ? bool = false : bool = true)
+    // console.log(bool)
+    // console.log(bool)
+    return bool;
+}
 
+function createRegion(mapArea, maxRegionArea, num) {
+    let regionCapital = getCapital(mapArea, num);
+    regionCapital.capital = true;
+    let thisRegion = [regionCapital];
+
+    for(let i=thisRegion.length; i<maxRegionArea; i++) { thisRegion.push(findArea(mapArea, thisRegion, num))}
+    // if(thisRegion.length < maxRegionArea) { thisRegion.forEach(area => area.region = undefined); thisRegion = []; createRegion(mapArea, maxRegionArea, num) }
+    // else { thisRegion.forEach(area => area.region = num)}
     return thisRegion;
 }
 
-function checkRegion(lastRegion, mapArea) {
+function findArea(mapArea, thisRegion, num) {
     let thisArea = {};
-    mapArea.forEach(area => {
-        if      (!area.region) { thisArea = area }
-        else if (!area.region) { thisArea = area }
-        else if (!area.region) { thisArea = area }
-        else if (!area.region) { thisArea = area }
-        else if (!area.region) { thisArea = area }
-    });
-    
-    //FOR A MORE RANDOM WORLD
-    //CHANGE thisArea = area TO options.push(area) 
-    // let options = [];
-    // if(options.length > 0) thisArea = options[randomNumber(0, options.length - 1)];
+    // let lastRegionArea = thisRegion[thisRegion.length - 1];
 
+    thisRegion.forEach(regionArea => mapArea.forEach(area => {
+        let xCheck = ((regionArea.xPosition + 1 === area.xPosition || regionArea.xPosition - 1 === area.xPosition) && regionArea.yPosition === area.yPosition);
+        let yCheck = ((regionArea.yPosition + 1 === area.yPosition || regionArea.yPosition - 1 === area.yPosition) && regionArea.xPosition === area.xPosition);
+        if(area.region === undefined && (xCheck || yCheck)) thisArea = area
+    }));
+    
+
+    thisArea.region = num;
     return thisArea;
 }
 
 function getCapital(mapArea, num) {
-    let randomRegion = mapArea[randomNumber(0, mapArea.length)];
-    if(randomRegion && !randomRegion.region) randomRegion.region = `Region ${num}`;
-    else randomRegion = getCapital(mapArea, num)
-
+    let randomRegion = mapArea[randomNumber(0, mapArea.length - 1)];
+    if(randomRegion.region === undefined) randomRegion.region = num;
+    else if(randomRegion.region !== undefined) getCapital(mapArea, num);
+    
     return randomRegion
 }
 

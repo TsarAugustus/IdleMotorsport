@@ -5,7 +5,7 @@ function createCircuit(circuitNumber, worldMap, setup) {
         xPosition: randomNumber(setup.minX, setup.maxX - 1),
         yPosition: randomNumber(setup.minY, setup.maxY - 1)
     }
-
+    
     worldMap.forEach(area => getCircuitRegion(circuit, area));
 
     return circuit;
