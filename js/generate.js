@@ -28,6 +28,9 @@ function generateTiers(setup, paddock) {
     }
     
     tierArray.forEach(tier => evaluateTier(setup, tier));
+
+    tierArray.forEach(tier => tier.teams.forEach(team => team.drivers.forEach(driver => { tier.ranking.push({ name: driver.name, points: 0 }); tier.drivers.push(driver) })));
+
     return tierArray;
 }
 
@@ -106,7 +109,8 @@ function createTier(setup, paddock, num) {
         drivers: [],
         teams: [],
         faculty: [],
-        result: []
+        result: [],
+        ranking: []
     }
 
     let types = [];

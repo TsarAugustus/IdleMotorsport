@@ -7,6 +7,7 @@ function mapHTML(worldMap, setup, paddock) {
     paddock.circuits.circuits.forEach(circuit => addcircuitsToMap(circuit));
     let regionColorList = createColorList(setup);
     worldMap.forEach((area, index) => applyRegionColors(area, regionColorList));
+    paddock.result.forEach(season => addResult(season));
     // let regionList = document.createElement('div');
     // regionList.id = 'regionList';
     // document.body.appendChild(regionList)
@@ -15,6 +16,41 @@ function mapHTML(worldMap, setup, paddock) {
 
     // document.body.appendChild(regionList);
 
+}
+
+function addResult(season) {
+    let seasonElement = document.createElement('div');
+    seasonElement.id = season.name;
+    
+    // let dataSpan = document.createElement('span');
+    // dataSpan.id = 'dataSpan';
+
+    season.tiers.forEach(tier => {
+        seasonElement.appendChild(addTiers(tier, season));
+    })
+    
+    
+
+    // seasonElement.appendChild(dataSpan);
+    document.body.appendChild(seasonElement)
+}
+
+function addTiers(tier, season) {
+    let tierElement = document.createElement('div');
+
+    let tierTitle = document.createElement('span');
+    tierTitle.innerHTML = `${season.name} - ${tier.name}`;
+    tierElement.appendChild(tierTitle)
+
+    tier.ranking.forEach(driver => {
+        let driverElement = document.createElement('span');
+        driverElement.id = `${season.name}-${driver.name}`;
+        driverElement.innerHTML = `</br>${driver.name} : ${driver.points}`
+
+        tierElement.appendChild(driverElement)
+    })
+
+    return tierElement;
 }
 
 function addTeamsToMap(team) {
