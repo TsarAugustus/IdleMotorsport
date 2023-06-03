@@ -1,10 +1,12 @@
-function stepCircuit(circuits, driver) {
-    let result = {
-        driver,
-        value: randomNumber(1, 1000)
-    }
+function stepCircuit(circuit, tier) {
+    let result = [];
+
+    tier.teams.forEach(team => (stepTeam(circuit, team)))
 
     return result;
+}
+
+function stepTeam(circuit, team) { 
 }
 
 function randomNumber(min, max) {

@@ -6,7 +6,7 @@ function attemptDriverBuy(team, tier) {
     
     driver = potentialDriver;
 
-    if(driver.name) tier.availableDrivers.filter(thisDriver => thisDriver.name !== driver.name);
+    if(driver.name) tier.availableDrivers.forEach((thisDriver, index) => thisDriver.name === driver.name ? tier.availableDrivers.splice(index, 1)  : '');
     return driver;
 }
 

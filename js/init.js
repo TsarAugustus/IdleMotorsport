@@ -10,14 +10,14 @@ let paddock = {
 };
 
 let setup = {
-    circuitsToGenerate: 100,
+    circuitsToGenerate: 20,
     regionCount: 4,
     minX: 0,
-    maxX: 20,
+    maxX: 0, //Test
     minY: 0,
-    maxY: 20,
+    maxY: 0, //Test
     tiers: 5,
-    totalDrivers: 50,
+    totalDrivers: 20,
     totalTeams: 10,
     driversPerTeam: 1,
     totalFaculty: 50,
@@ -25,24 +25,29 @@ let setup = {
     seasons: 1
 }
 
+//Test
+// For now, the best way to generate is if the world length is
+// double the amount of regions. Lots of call stacks happen and 
+// crashed otherwise.
+// TODO: FIX MAP GENERATION
+setup.maxX = setup.regionCount * 2;
+setup.maxY = setup.regionCount * 2;
+
 function init() {
     // initializeHTML();
     let worldMap = createMap(setup);
     if(worldMap === undefined) {
-        // console.log('restart'); 
         init();
     }
-    else {
+    if(worldMap !== undefined)  {
         start(worldMap, setup);
         mapHTML(worldMap, setup, paddock);
-
     }
 }
 
 function start(worldMap, setup) {
     // let state = document.getElementById('gameEnabledButton').checked;
     // if(state) console.log('Start with Player')
-
     paddock.circuits = createCircuitMap(worldMap, setup);
     paddock.grid = generateGrid(worldMap, setup);
     paddock.result = generate(worldMap, setup, paddock);

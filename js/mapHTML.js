@@ -7,7 +7,6 @@ function mapHTML(worldMap, setup, paddock) {
     paddock.circuits.circuits.forEach(circuit => addcircuitsToMap(circuit));
     let regionColorList = createColorList(setup);
     worldMap.forEach((area, index) => applyRegionColors(area, regionColorList));
-    console.log(worldMap)
     // let regionList = document.createElement('div');
     // regionList.id = 'regionList';
     // document.body.appendChild(regionList)
