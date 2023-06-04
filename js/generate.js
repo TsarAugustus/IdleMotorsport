@@ -56,7 +56,7 @@ function evaluateTier(setup, tier) {
         for(let i=0; i<tier.driversPerTeam; i++) { 
             let driverAttempt = attemptDriverBuy(team, tier);
             if(driverAttempt.name) tier.availableDrivers.filter(driver => driver.name !== driverAttempt.name)
-            team.drivers.push(attemptDriverBuy(team, tier)) 
+            team.drivers.push(driverAttempt) 
         }
     })
     tier.teams.forEach(team => evaluateFaculty(team, tier));

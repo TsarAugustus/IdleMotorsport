@@ -13,14 +13,14 @@ let setup = {
     circuitsToGenerate: 20,
     regionCount: 4,
     minX: 0,
-    maxX: 0, //Test
+    maxX: 0, 
     minY: 0,
-    maxY: 0, //Test
+    maxY: 0, 
     tiers: 5,
-    totalDrivers: 20,
-    totalTeams: 10,
+    totalDrivers: 0,
+    totalTeams: 0,
     driversPerTeam: 1,
-    totalFaculty: 50,
+    totalFaculty: 0,
     totalFacultyType: 1,
     seasons: 1
 }
@@ -30,9 +30,11 @@ let setup = {
 // double the amount of regions. Lots of call stacks happen and 
 // crashed otherwise.
 // TODO: FIX MAP GENERATION
-setup.maxX = setup.regionCount * 2;
-setup.maxY = setup.regionCount * 2;
-
+setup.maxX          = setup.regionCount * 2;
+setup.maxY          = setup.regionCount * 2;
+setup.totalTeams    = setup.regionCount * 25;
+setup.totalDrivers  = setup.regionCount * 25;
+setup.totalFaculty  = setup.regionCount * 25;
 function init() {
     // initializeHTML();
     let worldMap = createMap(setup);
