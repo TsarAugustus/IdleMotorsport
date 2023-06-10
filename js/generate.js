@@ -1,7 +1,8 @@
 import { stepTier } from './stepTier.js';
 import { attemptCEOTeamBuy } from './attemptCEOTeamBuy.js';
 import { attemptFacultyBuy } from './attemptFacultyBuy.js';
-import { attemptDriverBuy } from './attemptDriverBuy.js'
+import { attemptDriverBuy } from './attemptDriverBuy.js';
+import { evaluateTiers } from './evaluateTiers.js';
 
 function generate(worldMap, setup, paddock) {
     let seasonArray = [];
@@ -17,6 +18,14 @@ function generateSeason(num, worldMap, setup, paddock) {
         tiers: generateTiers(setup, paddock)
     }
     season.tiers.forEach(tier => tier.result.push(stepTier(tier)));
+
+    evaluateTiers(season, setup);
+
+    // season.tiers.forEach(tier => {
+    //     tier.drivers.forEach(driver => {
+    //         if(driver.tier !== tier.name + 1) console.log(paddock)
+    //     })
+    // })
     
     return season;
 }
@@ -80,6 +89,8 @@ function evaluateFaculty(team, tier) {
         let facultyType = tier.facultyTypes.find(type => type === key)
         if(facultyType && !value.name || team.drivers.length === 0) { removeTeamMembers(team, tier); tier.teams.splice(tier.teams.indexOf(team), 1) }
     })
+
+    if(team.drivers.length > 0)team.drivers.forEach(driver => driver.team = team)
 }
 
 function removeTeamMembers(team, tier) {
@@ -96,7 +107,7 @@ function removeTeamMembers(team, tier) {
 
 function createTier(setup, paddock, num) {
     let tier = {
-        name: `Tier ${num}`,
+        name: num,
         driversPerTeam: setup.driversPerTeam,
         totalDrivers: setup.totalTeams * setup.driversPerTeam,
         totalTeams: setup.totalTeams,

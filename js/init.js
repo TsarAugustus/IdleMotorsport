@@ -22,7 +22,7 @@ let setup = {
     driversPerTeam: 1,
     totalFaculty: 0,
     totalFacultyType: 1,
-    seasons: 1
+    seasons: 2
 }
 
 //Test
@@ -35,6 +35,7 @@ setup.maxY          = setup.regionCount * 2;
 setup.totalTeams    = setup.regionCount * 25;
 setup.totalDrivers  = setup.regionCount * 25;
 setup.totalFaculty  = setup.regionCount * 25;
+
 function init() {
     // initializeHTML();
     let worldMap = createMap(setup);

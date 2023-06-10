@@ -13,3 +13,7 @@
 .capital {
     color: white !important;
 }
+
+.season {
+    border: 1px solid black;
+}

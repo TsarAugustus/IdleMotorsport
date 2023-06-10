@@ -7,6 +7,7 @@ function generateTeams(worldMap, setup, num) {
         yPosition: randomNumber(setup.minY, setup.maxY - 1),
         region: {},
         drivers: [],
+        points: 0,
         active: false
     }
 

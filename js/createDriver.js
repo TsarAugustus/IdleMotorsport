@@ -4,6 +4,7 @@ function createDriver(worldMap, setup, num) {
         tier: setup.tiers,
         xPosition: randomNumber(setup.minX, setup.maxX - 1),
         yPosition: randomNumber(setup.minY, setup.maxY - 1),
+        seasons: [],
         region: {},
         team: {},
         active: false

@@ -21,6 +21,7 @@ function mapHTML(worldMap, setup, paddock) {
 function addResult(season) {
     let seasonElement = document.createElement('div');
     seasonElement.id = season.name;
+    seasonElement.classList.add('season')
     
     // let dataSpan = document.createElement('span');
     // dataSpan.id = 'dataSpan';
