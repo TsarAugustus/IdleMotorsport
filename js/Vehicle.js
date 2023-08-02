@@ -3,6 +3,7 @@ function Vehicle(name, team, drivers) {
         name: name,
         team: team,
         drivers: drivers,
+        cost: Number,
         statistics: {
             wins: [],
             podiums: [],

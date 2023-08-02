@@ -1,7 +1,8 @@
-function Staff(name) {
+function Staff(name, type) {
     let thisStaff = {
         name: name,
         team: [],
+        type: type,
         statistics: {
             wins: [],
             podiums: [],
