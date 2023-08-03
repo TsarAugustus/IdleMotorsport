@@ -1,6 +1,9 @@
-function Circuit(name) {
+function Circuit(name, day, month, grade) {
     let thisCircuit = {
-        name: name
+        name: name,
+        day: day,
+        month: month,
+        grade: grade
     }
 
     return thisCircuit;
