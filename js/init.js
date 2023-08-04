@@ -17,7 +17,6 @@ function initialization() {
     const initialTeamArray = [];
     const initialVehicleArray = [];
     const initialCircuitArray = addCircuitsToArray(settings.initialCircuitNumber);
-    circuitArray = initialCircuitArray;
     const initialStaffArray = [];
     
     //Loops to fill initial Arrays
@@ -25,8 +24,6 @@ function initialization() {
     for(let i=0; i<settings.initialDriverNumber; i++) initialDriverArray.push(new Driver(`Driver ${i}`));
     for(let i=0; i<settings.initialTeamNumber; i++) initialTeamArray.push(new Team(`Team ${i}`));
     for(let i=0; i<settings.initialVehicleNumber; i++) initialVehicleArray.push(new Vehicle(`Vehicle ${i}`));
-    // for(let i=0; i<settings.initialCircuitNumber; i++) initialCircuitArray.push(new Circuit(`Circuit ${i}`));
-    // initialCircuitArray.push(addCircuitsToArray(settings.initialCircuitNumber))
     for(let i=0; i<settings.initialStaffNumber; i++) initialStaffArray.push(new Staff(`Staff ${i}`));
 
     generateSeason(
@@ -35,25 +32,29 @@ function initialization() {
         initialVehicleArray,
         initialCircuitArray,
         initialStaffArray
-    )
+    );
     
-    pause = false;
-    startInterval()
-    console.log(circuitArray)
+    startInterval();
 }
 
 function addCircuitsToArray(numberOfCircuits) {
     let list = [];
 
     for(let i=0; i<numberOfCircuits; i++) {
+        // A Circuit can have multiple Grades, 
+        // Which allows multiple Races to happen on the same date
+        let circuitGrade = [];
+        let numberOfGrades = getRandomNumber(1, settings.numberOfGrades);
+        for(let i=1; i <= numberOfGrades; i++) circuitGrade.push(i);
+
         let circuit = new Circuit(
             `Circuit ${i}`,
             getRandomNumber(1, settings.daysPerMonth),
             getRandomNumber(1, settings.monthsPerYear),
-            getRandomNumber(1, 3)
+            circuitGrade
         );
 
-        list.push(circuit)
+        list.push(circuit);
     }
     
     // If there are Circuits that are the exact same dates and grade, then redo the generation
@@ -73,24 +74,27 @@ function addCircuitsToArray(numberOfCircuits) {
             return -1
     })
 
-    return list
+    return list;
 }
 
 function startInterval() {
     let ticker = 0;
+    pause = false;
+
     setInterval(function() {
+        console.log(`Day ${day}/Month ${month}/Year ${year}`, pause);
+
         if(!pause) {
-            console.log(`Day ${day}/Month ${month}/Year ${year}`, pause);
-            
             circuitArray.forEach((circuit, index) => {
                 if(month === circuit.month && day === circuit.day) pause = true;
             });
             calculateDate();
-        }  else {
+        } else {
+            // When the game is paused
             ticker++
             if(ticker === 1) {
                 ticker = 0;
-                pause = false
+                pause = false;
                 calculateDate();
             }
         }    
@@ -117,12 +121,13 @@ function generateSeason(drivers, teams, vehicles, circuits, staff) {
     let thisSeason = {
 
     }
-    // console.log('Season Circuits: ', circuits)
+    // console.log('Season Circuits: ', circuits);
+
     return thisSeason;
 }
 
 function getRandomNumber(min, max) {
-    return Math.floor(Math.random() * (max - min + 1) + min)
+    return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
 initialization();
