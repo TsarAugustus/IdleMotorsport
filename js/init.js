@@ -2,97 +2,84 @@ import { settings } from './settings.js';
 import { Driver } from './Driver.js';
 import { Team } from './Team.js';
 import { Vehicle } from './Vehicle.js';
-import { Circuit } from './Circuit.js';
 import { Staff } from './Staff.js';
+
+import { getRandomNumber } from './getRandomNumber.js';
+import { addCircuitsToArray } from './addCircuitsToArray.js';
+import { generateSeason } from './generateSeason.js';
 
 let pause = Boolean;
 let day = 1;
 let month = 1;
 let year = 1;
 
-let circuitArray = [];
+let circuits = [];
 
 function initialization() {
-    const initialDriverArray = [];
-    const initialTeamArray = [];
-    const initialVehicleArray = [];
-    const initialCircuitArray = addCircuitsToArray(settings.initialCircuitNumber);
-    const initialStaffArray = [];
+    // const initialDriverArray = [];
+    // const initialTeamArray = [];
+    // const initialVehicleArray = [];
+    // const initialCircuitArray = addCircuitsToArray(settings.initialCircuitNumber);
+    // const initialStaffArray = [];
+
+    let initialArray = {
+        driverArray: [],
+        teamArray: [],
+        vehicleArray: [],
+        circuitArray: addCircuitsToArray(settings.initialCircuitNumber),
+        staffArray: []
+    }
     
     //Loops to fill initial Arrays
     //TODO: Make this less bad
-    for(let i=0; i<settings.initialDriverNumber; i++) initialDriverArray.push(new Driver(`Driver ${i}`));
-    for(let i=0; i<settings.initialTeamNumber; i++) initialTeamArray.push(new Team(`Team ${i}`));
-    for(let i=0; i<settings.initialVehicleNumber; i++) initialVehicleArray.push(new Vehicle(`Vehicle ${i}`));
-    for(let i=0; i<settings.initialStaffNumber; i++) initialStaffArray.push(new Staff(`Staff ${i}`));
+    for(let i=0; i<settings.initialDriverNumber; i++) initialArray.driverArray.push(new Driver(`Driver ${i}`));
+    for(let i=0; i<settings.initialTeamNumber; i++) initialArray.teamArray.push(new Team(`Team ${i}`));
+    for(let i=0; i<settings.initialVehicleNumber; i++) initialArray.vehicleArray.push(new Vehicle(`Vehicle ${i}`));
+    for(let i=0; i<settings.initialStaffNumber; i++) initialArray.staffArray.push(new Staff(`Staff ${i}`));
 
-    generateSeason(
-        initialDriverArray,
-        initialTeamArray,
-        initialVehicleArray,
-        initialCircuitArray,
-        initialStaffArray
-    );
+    circuits = initialArray.circuitArray;
+
+    generateSeason(initialArray);
     
+    createGameArea(initialArray);
+
     startInterval();
 }
 
-function addCircuitsToArray(numberOfCircuits) {
-    let list = [];
+function createGameArea(array) {
+    let { driverArray, teamArray, vehicleArray, circuitArray, staffArray } = array;
+    let circuitListDiv = document.getElementById('circuitList');
 
-    for(let i=0; i<numberOfCircuits; i++) {
-        // A Circuit can have multiple Grades, 
-        // Which allows multiple Races to happen on the same date
-        let circuitGrade = [];
-        let numberOfGrades = getRandomNumber(1, settings.numberOfGrades);
-        for(let i=1; i <= numberOfGrades; i++) circuitGrade.push(i);
 
-        let circuit = new Circuit(
-            `Circuit ${i}`,
-            getRandomNumber(1, settings.daysPerMonth),
-            getRandomNumber(1, settings.monthsPerYear),
-            circuitGrade
-        );
+    circuitArray.forEach(circuit => {
+        let thisCircuitDiv = document.createElement('p');
+        thisCircuitDiv.innerHTML = `Name: ${circuit.name} | Date: ${circuit.day}-${circuit.month} | Grade: ${circuit.grade}`;
+        // let thisCircuit = '';
 
-        list.push(circuit);
-    }
-    
-    // If there are Circuits that are the exact same dates and grade, then redo the generation
-    list.sort(function(a, b) {
-        if(a.month === b.month && a.day === b.day && a.grade === b.grade)
-            list = addCircuitsToArray(numberOfCircuits);
-    });
 
-    // Sort the Circuit dates according to month first
-    // Then sort the Circuit dates to days with that month
-    list.sort(function(a, b) {
-        if(a.month === b.month) 
-            return a.day - b.day;
-        else if(a.month > b.month) 
-            return 1
-        else if(a.month < b.month) 
-            return -1
+        circuitListDiv.appendChild(thisCircuitDiv);
     })
-
-    return list;
 }
 
 function startInterval() {
     let ticker = 0;
     pause = false;
-
+    let gameDate = document.getElementById('date');
+    
     setInterval(function() {
-        console.log(`Day ${day}/Month ${month}/Year ${year}`, pause);
-
+        let dateText = `Day ${day}/Month ${month}/Year ${year} - Paused: ${pause}`;
+        gameDate.innerHTML = dateText;
+        
         if(!pause) {
-            circuitArray.forEach((circuit, index) => {
+            circuits.forEach(circuit => {
                 if(month === circuit.month && day === circuit.day) pause = true;
             });
             calculateDate();
         } else {
             // When the game is paused
-            ticker++
-            if(ticker === 1) {
+            ticker++;
+
+            if(ticker === 5) {
                 ticker = 0;
                 pause = false;
                 calculateDate();
@@ -115,19 +102,6 @@ function calculateDate() {
     if(!pause) {
         day++;
     }
-}
-
-function generateSeason(drivers, teams, vehicles, circuits, staff) {
-    let thisSeason = {
-
-    }
-    // console.log('Season Circuits: ', circuits);
-
-    return thisSeason;
-}
-
-function getRandomNumber(min, max) {
-    return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
 initialization();
