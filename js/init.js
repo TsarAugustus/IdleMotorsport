@@ -7,6 +7,7 @@ import { Staff } from './Staff.js';
 import { getRandomNumber } from './getRandomNumber.js';
 import { addCircuitsToArray } from './addCircuitsToArray.js';
 import { generateSeason } from './generateSeason.js';
+import { createTechnologyScreen } from './createTechnologyScreen.js';
 
 let pause = Boolean;
 let day = 1;
@@ -38,6 +39,8 @@ function initialization() {
     for(let i=0; i<settings.initialStaffNumber; i++) initialArray.staffArray.push(new Staff(`Staff ${i}`));
 
     circuits = initialArray.circuitArray;
+
+    createTechnologyScreen();
 
     generateSeason(initialArray);
     

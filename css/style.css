@@ -1,19 +1,56 @@
-.circuit {
-    
-}
-
-.team {
-    
-}
-
-.driver {
-
-}
-
-.capital {
-    color: white !important;
-}
-
-.season {
+#Technology {
     border: 1px solid black;
+    width: 40%;
+}
+
+#technologyResearch {
+    display: flex;
+    justify-content: space-evenly;
+    
+}
+
+#departmentDiv {
+    border: 1px solid black;
+    display: flex;
+    justify-content: center;
+}
+
+.departmentHead {
+    border: 1px solid black;
+    margin: 1em;
+}
+
+#focusContainer {
+    display: flex;
+    flex-direction: row;
+    border: 1px solid black;
+}
+
+#focusContainer div {
+    display: flex;
+    flex-direction: column;
+    margin: 1em;
+    padding: 1em;
+    border: 1px solid black;
+}
+
+.focus {
+    display: flex;
+    text-align: center;
+    width: 5em;
+}
+
+.focusTitle {
+    margin-bottom: 1em;
+}
+
+.tech {
+    color: red;
+    border: 1px solid black;
+    margin-top: 0.2em;
+    margin-bottom: 0.2em;
+}
+
+.unlocked {
+    color: green;
 }
