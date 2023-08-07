@@ -28,20 +28,20 @@ let circuits = [];
 function initialization() {
 
     let initialArray = {
-        driverArray: [],
-        teamArray: [],
-        vehicleArray: [],
-        circuitArray: addCircuitsToArray(settings.initialCircuitNumber),
-        staffArray: []
+        drivers: [],
+        teams: [],
+        vehicles: [],
+        circuits: addCircuitsToArray(settings.initialCircuitNumber),
+        staff: []
     }
     
     //Loops to fill initial Arrays
     //TODO: Make this less bad
-    for(let i=0; i<settings.initialDriverNumber; i++) initialArray.driverArray.push(new Driver(`Driver ${i}`));
-    for(let i=0; i<settings.initialVehicleNumber; i++) initialArray.vehicleArray.push(new Vehicle(`Vehicle ${i}`));
-    for(let i=0; i<settings.initialStaffNumber; i++) initialArray.staffArray.push(new Staff(`Staff ${i}`));
+    for(let i=0; i<settings.initialDriverNumber; i++) initialArray.drivers.push(new Driver(`Driver ${i}`));
+    for(let i=0; i<settings.initialVehicleNumber; i++) initialArray.vehicles.push(new Vehicle(`Vehicle ${i}`));
+    for(let i=0; i<settings.initialStaffNumber; i++) initialArray.staff.push(new Staff(`Staff ${i}`));
 
-    circuits = initialArray.circuitArray;
+    circuits = initialArray.circuits;
 
     let gameDate = document.getElementById('date');
     let dateText = `Day ${day}/Month ${month}/Year ${year} - Paused: ${pause}`;
@@ -54,8 +54,14 @@ function initialization() {
         if(!pause) day++;
     });
 
-    
-    console.log(generateSeason(initialArray));
+    let seasons = [];
+    for(let i=0; i<2; i++) {
+        if(i === 0) seasons.push(generateSeason(initialArray, i));
+        else seasons.push(generateSeason(seasons[i-1], i));
+    }
+
+    console.log(seasons);
+    // console.log(generateSeason(initialArray));
     
     startInterval();
 }

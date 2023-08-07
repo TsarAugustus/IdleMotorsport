@@ -2,63 +2,129 @@ import { Team } from './Team.js';
 import { settings } from './settings.js';
 import { getRandomNumber } from './getRandomNumber.js';
 
-function generateSeason(array) {
-    let { driverArray, teamArray, vehicleArray, circuitArray, staffArray } = array;
+function generateSeason(array, num) {
+    let { drivers, teams, vehicles, circuits, staff } = array;
     
     let thisSeason = {
-        drivers: driverArray,
-        teams: teamArray,
-        vehicles: vehicleArray,
-        circuits: circuitArray,
-        staff: staffArray,
-        circuitResult: []
+        name: `Season ${num}`,
+        drivers: drivers,
+        teams: teams,
+        vehicles: vehicles,
+        circuits: circuits,
+        staff: staff,
+        circuitResult: [],
+        tierResults: []
     }
     
     // Fill Staff ownedTeams array if Staff owns a Team
     let teamsToGenerate = settings.teamsPerSeason - thisSeason.teams.length;
-    thisSeason.teams = createSeasonTeams(driverArray, teamsToGenerate, thisSeason.staff);
+    let initialSeasonGeneration = createSeasonTeams(drivers, teamsToGenerate, thisSeason.staff);
+    if(thisSeason.teams.length < teamsToGenerate) { thisSeason.teams = thisSeason.teams.concat(initialSeasonGeneration)}
 
     let simulatedSeason = simulateSeason(thisSeason);
 
-    let tierResults = [];
     for(let circuit of simulatedSeason.circuitResult) {
-        let tierResultsCheck = tierResults.filter(result => { return result.rank === circuit.rank });
+        let tierResultsCheck = thisSeason.tierResults.filter(result => { return result.rank === circuit.rank });
         let newTier = {
             rank: circuit.rank,
-            drivers: []
+            driverResult: [],
+            teamResult: []
         }
 
         if(tierResultsCheck.length === 0) {
-            newTier.drivers = getTierDriversResults(newTier.rank, thisSeason.drivers, simulatedSeason.circuitResult);
+            newTier.driverResult = getTierDriversResults(simulatedSeason.circuitResult);
+            newTier.teamResult = getTierTeamResults(simulatedSeason.circuitResult);
 
-            tierResults.push(newTier);
+            thisSeason.tierResults.push(newTier);
         }
+    }    
+
+    // Adds Championship Title to Team
+    for(let tierResult of thisSeason.tierResults) {
     }
 
+    // Adds Championship Title to Driver
+    for(let tierResult of thisSeason.tierResults) {
+        let tierTeamChampion = tierResult.teamResult[0];
+        let tierDriverChampion = tierResult.driverResult[0];
+
+        for(let team of thisSeason.teams) {
+            if(team.name === tierTeamChampion.name) {
+                let teamIndex = thisSeason.teams.indexOf(team);
+
+                let thisTeamChampionship = {
+                    season: thisSeason.name,
+                    rank: tierResult.rank,
+                    result: tierResult
+                }
+
+                thisSeason.teams[teamIndex].statistics.titles.push(thisTeamChampionship);
+            }
+        }
+
+        for(let driver of thisSeason.drivers) {
+            if(driver.name === tierDriverChampion.name) {
+                let driverIndex = thisSeason.drivers.indexOf(driver);
+
+                // console.log(thisSeason.teams[teamIndex])
+                let thisDriverChampionship = {
+                    season: thisSeason.name,
+                    rank: tierResult.rank,
+                    result: tierResult
+                };
+
+                thisSeason.drivers[driverIndex].statistics.titles.push(thisDriverChampionship);
+            }
+        }
+    }
+    
     return thisSeason;
 }
 
-function getTierDriversResults(rank, drivers, results) {
+function getTierTeamResults(results) {
+    let tierTeamResults = [];
+
+    for(let result of results) {
+        for(let driverResult of result.circuitResult) {
+            let tierTeamResultsCheck = tierTeamResults.filter(thisResult => { return thisResult.name === driverResult.driver.team.name});
+
+            determineTeamPoints(tierTeamResults, tierTeamResultsCheck, driverResult);
+        }
+    }
+
+    tierTeamResults.sort((a, b) => {
+        return b.points - a.points
+    });
+
+    return tierTeamResults;
+}
+
+function determineTeamPoints(tierTeamResults, tierTeamResultsCheck, driverResult) {
+    if(tierTeamResultsCheck.length === 0) {
+        let tierTeam = {
+            name: driverResult.driver.team.name,
+            points: driverResult.points
+        }
+
+        tierTeamResults.push(tierTeam);
+    } else {
+        tierTeamResults.forEach(thisResult => {
+            if(thisResult.name === driverResult.driver.team.name) {
+                thisResult.points += driverResult.points
+            }
+        })
+    }
+
+}
+
+function getTierDriversResults(results) {
     let tierDriverResults = [];
 
     for(let result of results) {
         for(let driverResult of result.circuitResult) {
             let tierDriverResultsCheck = tierDriverResults.filter(thisResult => { return thisResult.name === driverResult.driver.name });
             
-            if(tierDriverResultsCheck.length === 0) {
-                let tierDriver = {
-                    name: driverResult.driver.name,
-                    points: driverResult.points
-                }
-
-                tierDriverResults.push(tierDriver);
-            } else {
-                tierDriverResults.forEach(thisResult => { 
-                    if(thisResult.name === driverResult.driver.name) {
-                        thisResult.points += driverResult.points;
-                    }
-                });
-            }
+            determineDriverPoints(tierDriverResults, tierDriverResultsCheck, driverResult);
         }
     }
 
@@ -67,6 +133,23 @@ function getTierDriversResults(rank, drivers, results) {
     });
 
     return tierDriverResults;
+}
+
+function determineDriverPoints(tierDriverResults, tierDriverResultsCheck, driverResult) {
+    if(tierDriverResultsCheck.length === 0) {
+        let tierDriver = {
+            name: driverResult.driver.name,
+            points: driverResult.points
+        }
+
+        tierDriverResults.push(tierDriver);
+    } else {
+        tierDriverResults.forEach(thisResult => { 
+            if(thisResult.name === driverResult.driver.name) {
+                thisResult.points += driverResult.points;
+            }
+        });
+    }
 }
 
 let points = {
