@@ -1,4 +1,6 @@
-let types = [
+import { getRandomNumber } from "./getRandomNumber.js";
+
+let Types = [
 {
     name: 'Team Principal',
     department: [],
@@ -143,16 +145,38 @@ let types = [
     rank: 1,
     skills: {},
     promotion: ['Sporting Director']
-}]
+}, 
+
+{
+    name: 'Hobbyist',
+    department: ['Aerodynamics', 'Chassis', 'Finance', 'Logistics', 'Power'],
+    rank: 0,
+    skills: {},
+    promotion: []
+}];
+
+let skills = [{
+    name: 'Ingenuity',
+    department: ['Aerodynamics', 'Chassis', 'Finance', 'Logistics', 'Power'],
+    number: 0
+}, {
+    name: 'Critial Thinking',
+    department: ['Aerodynamics', 'Chassis', 'Finance', 'Logistics', 'Power'],
+    number: 0
+}, {
+    name: 'Leadership',
+    department: ['Aerodynamics', 'Chassis', 'Finance', 'Logistics', 'Power'],
+    number: 0
+}];
 
 function Staff(name, type) {
     let thisStaff = {
         name: name,
         team: [],
         type: type,
-        skills: {
-
-        },
+        department: [],
+        promotion: [],
+        skills: [],
         statistics: {
             wins: [],
             podiums: [],
@@ -165,12 +189,29 @@ function Staff(name, type) {
     }
 
     if(thisStaff.type === undefined) {
+        let types = getLowestStaffTypes(Types);
         let staffType = types[Math.floor(Math.random() * types.length)];
+
         thisStaff.type = staffType.name;
-        thisStaff.skills = staffType.skills;
+        thisStaff.department = staffType.department;
+        thisStaff.promotion = staffType.promotion;
     }
 
+    let newSkill = skills[Math.floor(Math.random() * skills.length)];
+    newSkill.number = getRandomNumber(1, 10);
+    thisStaff.skills.push(newSkill);
+
     return thisStaff;
+}
+
+function getLowestStaffTypes(Types) {
+    let rank;
+    let lowestStaffTypes = [];
+    let lowestType = Types.forEach(type => { if(!rank || rank > type.rank) rank = type.rank });
+
+    for(let staffTypes of Types) if(staffTypes.rank === rank) lowestStaffTypes.push(staffTypes);
+
+    return lowestStaffTypes;
 }
 
 export { Staff }

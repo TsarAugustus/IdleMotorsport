@@ -4,7 +4,7 @@ let settings = {
     // initialTeamNumber: 10,
     initialVehicleNumber: 10,
     initialCircuitNumber: 0,
-    initialStaffNumber: 100,
+    initialStaffNumber: 10,
 
     numberOfGrades: 5,
 

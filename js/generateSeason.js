@@ -5,7 +5,10 @@ function generateSeason(array) {
     
     let thisSeason = {
 
+
     }
+
+    console.log(staffArray)
 
     return thisSeason;
 }
