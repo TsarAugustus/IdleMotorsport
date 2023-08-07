@@ -1,12 +1,14 @@
 let settings = {
     //Initial settings
-    initialDriverNumber: 10,
+    initialDriverNumber: 20,
     // initialTeamNumber: 10,
-    initialVehicleNumber: 10,
-    initialCircuitNumber: 0,
+    initialVehicleNumber: 0,
+    initialCircuitNumber: 10,
     initialStaffNumber: 10,
 
     numberOfGrades: 5,
+    teamsPerSeason: 10,
+    driversPerTeam: 2,
 
     //setInterval related settings
     daysPerMonth: 30,

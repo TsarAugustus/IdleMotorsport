@@ -172,11 +172,14 @@ let skills = [{
 function Staff(name, type) {
     let thisStaff = {
         name: name,
-        team: [],
+        teamEmployed: [],
+        teamOwned: [],
         type: type,
         department: [],
         promotion: [],
         skills: [],
+        funds: getRandomNumber(1, 10),
+        cost: 0,
         statistics: {
             wins: [],
             podiums: [],

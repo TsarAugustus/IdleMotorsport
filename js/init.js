@@ -17,11 +17,6 @@ let year = 1;
 let circuits = [];
 
 function initialization() {
-    // const initialDriverArray = [];
-    // const initialTeamArray = [];
-    // const initialVehicleArray = [];
-    // const initialCircuitArray = addCircuitsToArray(settings.initialCircuitNumber);
-    // const initialStaffArray = [];
 
     let initialArray = {
         driverArray: [],
@@ -34,13 +29,20 @@ function initialization() {
     //Loops to fill initial Arrays
     //TODO: Make this less bad
     for(let i=0; i<settings.initialDriverNumber; i++) initialArray.driverArray.push(new Driver(`Driver ${i}`));
-    // for(let i=0; i<settings.initialTeamNumber; i++) initialArray.teamArray.push(new Team(`Team ${i}`));
     for(let i=0; i<settings.initialVehicleNumber; i++) initialArray.vehicleArray.push(new Vehicle(`Vehicle ${i}`));
     for(let i=0; i<settings.initialStaffNumber; i++) initialArray.staffArray.push(new Staff(`Staff ${i}`));
 
     circuits = initialArray.circuitArray;
 
     // createTechnologyScreen();
+
+    let pauseButton = document.getElementById('pause');
+    pauseButton.addEventListener('click', () => {
+        pause = !pause;
+        if(!pause) day++;
+    });
+
+    createTechnologyScreen();
 
     generateSeason(initialArray);
     
@@ -49,7 +51,7 @@ function initialization() {
     startInterval();
 }
 
-function createGameArea(array) {
+function createGameArea(array) {    
     let { driverArray, teamArray, vehicleArray, circuitArray, staffArray } = array;
     let circuitListDiv = document.getElementById('circuitList');
 
@@ -57,15 +59,12 @@ function createGameArea(array) {
     circuitArray.forEach(circuit => {
         let thisCircuitDiv = document.createElement('p');
         thisCircuitDiv.innerHTML = `Name: ${circuit.name} | Date: ${circuit.day}-${circuit.month} | Grade: ${circuit.grade}`;
-        // let thisCircuit = '';
 
-
-        circuitListDiv.appendChild(thisCircuitDiv);
+        // circuitListDiv.appendChild(thisCircuitDiv);
     })
 }
 
 function startInterval() {
-    let ticker = 0;
     pause = false;
     let gameDate = document.getElementById('date');
     
@@ -78,15 +77,8 @@ function startInterval() {
                 if(month === circuit.month && day === circuit.day) pause = true;
             });
             calculateDate();
-        } else {
-            // When the game is paused
-            ticker++;
-
-            if(ticker === 5) {
-                ticker = 0;
-                pause = false;
-                calculateDate();
-            }
+        } else if(pause) {
+            // When the game is paused  
         }    
     }, 1000)
 }

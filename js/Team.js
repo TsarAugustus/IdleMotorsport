@@ -3,6 +3,7 @@ import { Departments } from './Departments.js';
 function Team(name) {
     let thisTeam = {
         name: name,
+        owner: {},
         drivers: [],
         departments: [],
         statistics: {

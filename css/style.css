@@ -1,6 +1,55 @@
+body {
+    margin: 0px;
+}
+
+#map {
+    display: flex;
+    width: 40vw;
+    height: 50vh;
+    border: 1px solid black;
+}
+
+#area {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid blue;
+    width: 100vw;
+}
+
+#ribbon {
+    display: flex;
+    width: 100vw;
+    height: 5vh;
+    border: 1px solid green;
+}
+
+#pause {
+
+}
+
+/* Game Screen */
+
+#game {
+    border: 1px solid red;
+    height: 95vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: row;
+}
+
+#circuitList {
+    /* border: 1px solid black;
+    width: 20%; */
+}
+
+/* =========== */
+
+/* Technology Screen */
+
 #Technology {
     border: 1px solid black;
-    width: 40%;
+    width: 100%;
+    height: 50vh;
 }
 
 #technologyResearch {
@@ -23,6 +72,7 @@
 #focusContainer {
     display: flex;
     flex-direction: row;
+    margin-top: 1em;
     border: 1px solid black;
 }
 
@@ -34,10 +84,30 @@
     border: 1px solid black;
 }
 
+#focusContainer div:nth-child(1) {
+    border: 1px solid red;
+}
+
+#focusContainer div:nth-child(2) {
+    border: 1px solid green;
+}
+
+#focusContainer div:nth-child(3) {
+    border: 1px solid cyan;
+}
+
+#focusContainer div:nth-child(4) {
+    border: 1px solid orange;
+}
+
+#focusContainer div:nth-child(5) {
+    border: 1px solid purple    ;
+}
+
 .focus {
     display: flex;
     text-align: center;
-    width: 5em;
+    width: 10em;
 }
 
 .focusTitle {
@@ -45,12 +115,16 @@
 }
 
 .tech {
-    color: red;
+    color: green;
     border: 1px solid black;
     margin-top: 0.2em;
     margin-bottom: 0.2em;
+    width: 100%;
 }
 
 .unlocked {
     color: green;
 }
+
+
+/* ================= */
