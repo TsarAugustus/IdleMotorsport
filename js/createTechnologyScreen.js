@@ -72,8 +72,7 @@ function checkTechnologyUnlock(technology, focus) {
         if(technology.name === thisTech.name) {
             if(focus.technology[index - 1] && focus.technology[index - 1].unlocked) {
                 check = true;
-            } 
-            else if (!focus.technology[index - 1]) {
+            } else if (!focus.technology[index - 1]) {
                 check = true;
             }
         }

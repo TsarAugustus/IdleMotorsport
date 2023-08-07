@@ -34,13 +34,13 @@ function initialization() {
     //Loops to fill initial Arrays
     //TODO: Make this less bad
     for(let i=0; i<settings.initialDriverNumber; i++) initialArray.driverArray.push(new Driver(`Driver ${i}`));
-    for(let i=0; i<settings.initialTeamNumber; i++) initialArray.teamArray.push(new Team(`Team ${i}`));
+    // for(let i=0; i<settings.initialTeamNumber; i++) initialArray.teamArray.push(new Team(`Team ${i}`));
     for(let i=0; i<settings.initialVehicleNumber; i++) initialArray.vehicleArray.push(new Vehicle(`Vehicle ${i}`));
     for(let i=0; i<settings.initialStaffNumber; i++) initialArray.staffArray.push(new Staff(`Staff ${i}`));
 
     circuits = initialArray.circuitArray;
 
-    createTechnologyScreen();
+    // createTechnologyScreen();
 
     generateSeason(initialArray);
     
