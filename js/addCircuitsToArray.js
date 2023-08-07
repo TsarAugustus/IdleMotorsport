@@ -31,12 +31,9 @@ function addCircuitsToArray(numberOfCircuits) {
     // Sort the Circuit dates according to month first
     // Then sort the Circuit dates to days with that month
     list.sort(function(a, b) {
-        if(a.month === b.month) 
-            return a.day - b.day;
-        else if(a.month > b.month) 
-            return 1
-        else if(a.month < b.month) 
-            return -1
+        if(a.month === b.month) return a.day - b.day;
+        else if(a.month > b.month) return 1
+        else if(a.month < b.month) return -1
     })
 
     return list;

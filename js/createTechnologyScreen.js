@@ -65,8 +65,7 @@ function createFocusScreen(focusContainer, department) {
                 if(check) {
                     technology.unlocked = true;
                     thisTechnology.classList.add('unlocked');
-                }
-                
+                } 
             })
 
             thisFocus.appendChild(thisTechnology);

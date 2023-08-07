@@ -1,3 +1,4 @@
+import { settings } from './settings.js';
 import { Departments } from './Departments.js';
 
 function Team(name) {
@@ -6,6 +7,7 @@ function Team(name) {
         owner: {},
         drivers: [],
         departments: [],
+        rank: settings.numberOfGrades,
         statistics: {
             wins: [],
             podiums: [],

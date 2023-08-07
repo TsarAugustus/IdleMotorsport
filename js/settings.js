@@ -1,10 +1,10 @@
 let settings = {
     //Initial settings
-    initialDriverNumber: 20,
+    initialDriverNumber: 100,
     // initialTeamNumber: 10,
     initialVehicleNumber: 0,
     initialCircuitNumber: 10,
-    initialStaffNumber: 10,
+    initialStaffNumber: 20,
 
     numberOfGrades: 5,
     teamsPerSeason: 10,
