@@ -9,6 +9,14 @@ import { addCircuitsToArray } from './addCircuitsToArray.js';
 import { generateSeason } from './generateSeason.js';
 import { createTechnologyScreen } from './createTechnologyScreen.js';
 
+let tabsFunctions = [{
+    name: 'Technology',
+    function: createTechnologyScreen
+}, {
+    name: 'Circuits',
+    function: createCircuitScreen
+}];
+
 let pause = Boolean;
 let day = 1;
 let month = 1;
@@ -36,31 +44,65 @@ function initialization() {
 
     // createTechnologyScreen();
 
+    let gameDate = document.getElementById('date');
+    let dateText = `Day ${day}/Month ${month}/Year ${year} - Paused: ${pause}`;
+    gameDate.innerHTML = dateText;
+
+    //Creates pause button
     let pauseButton = document.getElementById('pause');
     pauseButton.addEventListener('click', () => {
         pause = !pause;
         if(!pause) day++;
     });
 
-    createTechnologyScreen();
+    //Creating tabs
+    //This is hardcoded and should be changed
+    let tabbedContainer = document.getElementById('tabbedContainer');
+    let tabsToAdd = [];
+    tabsFunctions.forEach(tab => tabsToAdd.push(tab.name) )
+
+    addTabsToDiv(tabbedContainer,tabsToAdd);
 
     generateSeason(initialArray);
-    
-    createGameArea(initialArray);
 
     startInterval();
 }
 
-function createGameArea(array) {    
-    let { driverArray, teamArray, vehicleArray, circuitArray, staffArray } = array;
-    let circuitListDiv = document.getElementById('circuitList');
+function addTabsToDiv(div, tabs) {
+    let tabsDiv = document.createElement('div');
+    tabsDiv.id = 'tabs';
+    
+    tabs.forEach(tab => {
+        let newTab = document.createElement('span');
+        newTab.id = tab;
+        newTab.innerHTML = tab;
+        newTab.addEventListener('click', () => {
+            tabsFunctions.forEach(thisTabFunction => { if(thisTabFunction.name === tab) thisTabFunction.function(div, circuits) });
+        })
 
+        tabsDiv.appendChild(newTab);
+    })
+
+    div.insertBefore(tabsDiv, div.firstChild);
+}
+
+function createCircuitScreen(div, circuitArray) {    
+    let containerDivChildren = div.children;
+    let displayContainer;
+
+    for(let child in containerDivChildren) {
+        let thisChild = containerDivChildren[child];
+        if(thisChild.id === `${div.id}Display`) {
+            
+            if(thisChild.children.length > 0) thisChild.innerHTML = '';
+            displayContainer = thisChild;
+        }
+    }
 
     circuitArray.forEach(circuit => {
         let thisCircuitDiv = document.createElement('p');
         thisCircuitDiv.innerHTML = `Name: ${circuit.name} | Date: ${circuit.day}-${circuit.month} | Grade: ${circuit.grade}`;
-
-        // circuitListDiv.appendChild(thisCircuitDiv);
+        displayContainer.appendChild(thisCircuitDiv)
     })
 }
 
@@ -71,6 +113,7 @@ function startInterval() {
     setInterval(function() {
         let dateText = `Day ${day}/Month ${month}/Year ${year} - Paused: ${pause}`;
         gameDate.innerHTML = dateText;
+        
         
         if(!pause) {
             circuits.forEach(circuit => {

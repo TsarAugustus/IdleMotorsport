@@ -17,10 +17,13 @@ function generateSeason(array) {
     let teamOwnerPool = [];
     teamOwnerPool = staffArray;
     
+    // Fill Staff ownedTeams array if Staff owns a Team
     thisSeason.teams = createSeasonTeams(driverArray, teamOwnerPool, teamsToGenerate);
-
-    console.log(thisSeason.teams)
-    console.log(thisSeason.circuits)
+    thisSeason.staff.forEach(staff => {
+        thisSeason.teams.forEach(team => {
+            if(team.owner.name === staff.name) staff.teamOwned.push(team);
+        })
+    });
 
     return thisSeason;
 }
@@ -48,6 +51,7 @@ function createSeasonTeams(driverArray, teamOwnerPool, teamsToGenerate) {
             let contractCost = driver.cost;
 
             team.owner = potentialOwner;
+            // staff.teamOwned.push(potentialOwner);
             driver.team = team;
             team.drivers.push(driver);
             potentialOwner.funds -= contractCost;

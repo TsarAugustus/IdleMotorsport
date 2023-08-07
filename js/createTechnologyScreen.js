@@ -1,15 +1,24 @@
 import { Departments } from "./Departments.js";
 
-function createTechnologyScreen() {
-    let technologyDiv = document.getElementById('Technology');
+function createTechnologyScreen(div) {
+    let containerDivChildren = div.children;
+    let displayContainer;
+
+    for(let child in containerDivChildren) {
+        let thisChild = containerDivChildren[child];
+        if(thisChild.id === `${div.id}Display`) {
+            if(thisChild.children.length > 0) thisChild.innerHTML = '';
+            displayContainer = thisChild;
+        }
+    }
 
     let departmentDiv = document.createElement('div');
     departmentDiv.id = 'departmentDiv';
-    technologyDiv.appendChild(departmentDiv);
+    displayContainer.appendChild(departmentDiv);
 
     let technologyResearchDiv = document.createElement('div');
     technologyResearchDiv.id = 'technologyResearch';
-    technologyDiv.appendChild(technologyResearchDiv);
+    displayContainer.appendChild(technologyResearchDiv);
 
     for(let department of Departments) {
         let departmentElement = document.createElement('div');
@@ -49,6 +58,7 @@ function createFocusScreen(focusContainer, department) {
             let thisTechnology = document.createElement('span');
             thisTechnology.innerHTML = technology.name;
             thisTechnology.classList.add('tech');
+            if(technology.unlocked) thisTechnology.classList.add('unlocked');
             thisTechnology.addEventListener('click', function() {
                 let check = checkTechnologyUnlock(technology, focus);
 
