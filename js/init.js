@@ -61,7 +61,6 @@ function initialization() {
     }
 
     console.log(seasons);
-    // console.log(generateSeason(initialArray));
     
     startInterval();
 }

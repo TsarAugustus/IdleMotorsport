@@ -39,44 +39,42 @@ function generateSeason(array, num) {
         }
     }    
 
-    // Adds Championship Title to Team
-    for(let tierResult of thisSeason.tierResults) {
-    }
-
-    // Adds Championship Title to Driver
     for(let tierResult of thisSeason.tierResults) {
         let tierTeamChampion = tierResult.teamResult[0];
         let tierDriverChampion = tierResult.driverResult[0];
-
+        
         for(let team of thisSeason.teams) {
             if(team.name === tierTeamChampion.name) {
-                let teamIndex = thisSeason.teams.indexOf(team);
-
                 let thisTeamChampionship = {
                     season: thisSeason.name,
                     rank: tierResult.rank,
                     result: tierResult
                 }
-
-                thisSeason.teams[teamIndex].statistics.titles.push(thisTeamChampionship);
+                
+                team.statistics.titles.push(thisTeamChampionship);
             }
         }
-
+        
         for(let driver of thisSeason.drivers) {
             if(driver.name === tierDriverChampion.name) {
-                let driverIndex = thisSeason.drivers.indexOf(driver);
-
-                // console.log(thisSeason.teams[teamIndex])
                 let thisDriverChampionship = {
                     season: thisSeason.name,
                     rank: tierResult.rank,
                     result: tierResult
                 };
 
-                thisSeason.drivers[driverIndex].statistics.titles.push(thisDriverChampionship);
+                driver.statistics.titles.push(thisDriverChampionship);
             }
         }
     }
+
+    thisSeason.teams.sort((a, b) => {
+        return b.statistics.titles.length - a.statistics.titles.length
+    });
+
+    thisSeason.drivers.sort((a, b) => {
+        return b.statistics.titles.length - a.statistics.titles.length
+    });
     
     return thisSeason;
 }
@@ -169,10 +167,6 @@ function simulateSeason(season) {
             circuitResult: circuitSimulation.circuitResult
         }
 
-        result.circuitResult.sort((a, b) => {
-            return b.driverResult - a.driverResult
-        });
-
         result.circuitResult.forEach((thisResult, index) => {
             if(points[index + 1]) thisResult.points += points[index + 1];
         })
@@ -187,6 +181,7 @@ function simulateCircuit(circuit, season) {
     let eligibleTeams = [];
     let result = {
         circuit: circuit,
+        season: season,
         rank: Number,
         circuitResult: []
     };
@@ -204,11 +199,52 @@ function simulateCircuit(circuit, season) {
         team.drivers.forEach(driver => {
             result.circuitResult.push({
                 driver: driver,
+                // circuit: circuit,
                 points: 0,
                 driverResult: getRandomNumber(0, 10)
             })
         })
     })
+
+    result.circuitResult.sort((a, b) => {
+        return b.driverResult - a.driverResult
+    });
+
+    for(let thisResult in result.circuitResult) {
+        let podiumPlacement = 3;
+        let teamEntries = result.circuitResult[thisResult].driver.team.statistics.entries;
+
+        result.circuitResult[thisResult].driver.statistics.entries.push(result);
+
+        // Adds entries to Teams
+        let teamEntriesCheck = teamEntries.filter(thisEntry => {
+            return (result.circuit.name === thisEntry.circuit.name && result.season.name === thisEntry.season.name)
+        })
+
+        if(teamEntriesCheck.length === 0) {
+            result.circuitResult[thisResult].driver.team.statistics.entries.push(result)
+        }
+        
+        if(Number(thisResult) === 0) {
+            result.circuitResult[thisResult].driver.statistics.wins.push(result);
+            result.circuitResult[thisResult].driver.team.statistics.wins.push(result);
+
+            result.circuitResult[thisResult].driver.team.departments.forEach(department => {
+                department.staff.forEach(thisStaff => {
+                    thisStaff.statistics.wins.push(result)
+                })
+            })
+        } else if (Number(thisResult) < podiumPlacement) {
+            result.circuitResult[thisResult].driver.statistics.podiums.push(result);
+            result.circuitResult[thisResult].driver.team.statistics.podiums.push(result);
+            
+            result.circuitResult[thisResult].driver.team.departments.forEach(department => {
+                department.staff.forEach(thisStaff => {
+                    thisStaff.statistics.podiums.push(result)
+                })
+            })
+        }
+    }
 
     return result;
 }
@@ -269,7 +305,6 @@ function buyStaffForTeam(team, staff) {
     let ownerFunds = team.owner.funds;
 
     staff.forEach(staffMember => {
-        // console.log(staffMember.teamOwned.length + staffMember.teamEmployed.length)
         if(ownerFunds > staffMember.cost && staffMember.teamEmployed.length === 0 && staffMember.teamOwned.length === 0) {
             potentialStaff.push(staffMember);
             ownerFunds -= staffMember.cost;
