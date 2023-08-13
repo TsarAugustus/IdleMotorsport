@@ -1,25 +1,25 @@
-import { getRandomNumber } from "./getRandomNumber.js";
+import { getRandomNumber } from './getRandomNumber.js';
 
 function Driver(name) {
-    let thisDriver = {
-        name: name,
-        teamEmployed: [],
-        teamOwned: [],
-        age: getRandomNumber(16, 16),
-        funds: 0,
-        cost: getRandomNumber(1, 10),
-        statistics: {
-            wins: [],
-            podiums: [],
-            fastestLaps: [],
-            poles: [],
-            titles: [],
-            entries: [],
-            points: 0
-        }
-    }
+	const thisDriver = {
+		name: name,
+		teamEmployed: [],
+		teamOwned: [],
+		age: getRandomNumber(16, 16),
+		funds: 0,
+		cost: getRandomNumber(1, 10),
+		statistics: {
+			wins: [],
+			podiums: [],
+			fastestLaps: [],
+			poles: [],
+			titles: [],
+			entries: [],
+			points: 0
+		}
+	};
 
-    return thisDriver;
+	return thisDriver;
 }
 
-export { Driver }
+export { Driver };

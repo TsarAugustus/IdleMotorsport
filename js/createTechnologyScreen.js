@@ -1,93 +1,91 @@
-import { Departments } from "./Departments.js";
+import { Departments } from './Departments.js';
 
 function createTechnologyScreen(div) {
-    let containerDivChildren = div.children;
-    let displayContainer;
+	const containerDivChildren = div.children;
+	let displayContainer = null;
 
-    for(let child in containerDivChildren) {
-        let thisChild = containerDivChildren[child];
-        if(thisChild.id === `${div.id}Display`) {
-            if(thisChild.children.length > 0) thisChild.innerHTML = '';
-            displayContainer = thisChild;
-        }
-    }
+	for(const child in containerDivChildren) {
+		const thisChild = containerDivChildren[child];
+		if(thisChild.id === `${div.id}Display`) {
+			if(thisChild.children.length > 0) thisChild.innerHTML = '';
+			displayContainer = thisChild;
+		}
+	}
 
-    let departmentDiv = document.createElement('div');
-    departmentDiv.id = 'departmentDiv';
-    displayContainer.appendChild(departmentDiv);
+	const departmentDiv = document.createElement('div');
+	departmentDiv.id = 'departmentDiv';
+	displayContainer.appendChild(departmentDiv);
 
-    let technologyResearchDiv = document.createElement('div');
-    technologyResearchDiv.id = 'technologyResearch';
-    displayContainer.appendChild(technologyResearchDiv);
+	const technologyResearchDiv = document.createElement('div');
+	technologyResearchDiv.id = 'technologyResearch';
+	displayContainer.appendChild(technologyResearchDiv);
 
-    for(let department of Departments) {
-        let departmentElement = document.createElement('div');
-        departmentElement.innerHTML = department.name;
-        departmentElement.id = department.name;
-        departmentElement.classList.add('departmentHead');
-        departmentElement.addEventListener('click', () => openResearchScreen(department));
+	for(const department of Departments) {
+		const departmentElement = document.createElement('div');
+		departmentElement.innerHTML = department.name;
+		departmentElement.id = department.name;
+		departmentElement.classList.add('departmentHead');
+		departmentElement.addEventListener('click', () => openResearchScreen(department));
 
-        departmentDiv.appendChild(departmentElement);
-    }
+		departmentDiv.appendChild(departmentElement);
+	}
 }
 
 function openResearchScreen(department) {
-    let technologyResearchDiv = document.getElementById('technologyResearch');
-    technologyResearchDiv.innerHTML = '';
+	const technologyResearchDiv = document.getElementById('technologyResearch');
+	technologyResearchDiv.innerHTML = '';
     
-    let focusContainer = document.createElement('div');
-    focusContainer.id = 'focusContainer';
+	const focusContainer = document.createElement('div');
+	focusContainer.id = 'focusContainer';
 
-    createFocusScreen(focusContainer, department);
+	createFocusScreen(focusContainer, department);
 
-    technologyResearchDiv.appendChild(focusContainer);
+	technologyResearchDiv.appendChild(focusContainer);
 }
 
 function createFocusScreen(focusContainer, department) {
-    for(let focus of department.focus) {
-        let thisFocus = document.createElement('div');
-        thisFocus.id = focus.name;
-        thisFocus.classList.add('focus');
+	for(const focus of department.focus) {
+		const thisFocus = document.createElement('div');
+		thisFocus.id = focus.name;
+		thisFocus.classList.add('focus');
 
-        let focusNameSpan = document.createElement('span');
-        focusNameSpan.innerHTML = focus.name;
-        focusNameSpan.classList.add('focusTitle');
-        thisFocus.appendChild(focusNameSpan);
+		const focusNameSpan = document.createElement('span');
+		focusNameSpan.innerHTML = focus.name;
+		focusNameSpan.classList.add('focusTitle');
+		thisFocus.appendChild(focusNameSpan);
 
-        for(let technology of focus.technology) {
-            let thisTechnology = document.createElement('span');
-            thisTechnology.innerHTML = technology.name;
-            thisTechnology.classList.add('tech');
-            if(technology.unlocked) thisTechnology.classList.add('unlocked');
-            thisTechnology.addEventListener('click', function() {
-                let check = checkTechnologyUnlock(technology, focus);
+		for(const technology of focus.technology) {
+			const thisTechnology = document.createElement('span');
+			thisTechnology.innerHTML = technology.name;
+			thisTechnology.classList.add('tech');
+			if(technology.unlocked) thisTechnology.classList.add('unlocked');
+			thisTechnology.addEventListener('click', function() {
+				const check = checkTechnologyUnlock(technology, focus);
 
-                if(check) {
-                    technology.unlocked = true;
-                    thisTechnology.classList.add('unlocked');
-                } 
-            })
+				if(check) {
+					technology.unlocked = true;
+					thisTechnology.classList.add('unlocked');
+				} 
+			});
 
-            thisFocus.appendChild(thisTechnology);
-        }
+			thisFocus.appendChild(thisTechnology);
+		}
 
-        focusContainer.appendChild(thisFocus)
-    }
+		focusContainer.appendChild(thisFocus);
+	}
 }
 
 function checkTechnologyUnlock(technology, focus) {
-    let check = false;
-    focus.technology.forEach((thisTech, index) => {
-        if(technology.name === thisTech.name) {
-            if(focus.technology[index - 1] && focus.technology[index - 1].unlocked) {
-                check = true;
-            } else if (!focus.technology[index - 1]) {
-                check = true;
-            }
-        }
-    });
+	let check = false;
+	focus.technology.forEach((thisTech, index) => {
+		if(technology.name === thisTech.name) {
+			const previousTech = focus.technology[index - 1];
+			if(previousTech && previousTech.unlocked) check = true;
+			else if (!focus.technology[index - 1]) check = true;
+		}
+	});
 
-    return check;
+	return check;
 }
 
-export { createTechnologyScreen }
+export { createTechnologyScreen };
