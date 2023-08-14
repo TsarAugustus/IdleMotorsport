@@ -22,7 +22,6 @@ let pause = Boolean;
 let day = 1;
 let month = 1;
 let year = 1;
-
 let circuits = [];
 
 function initialization() {
@@ -55,7 +54,7 @@ function initialization() {
 	});
 
 	const seasons = [];
-	for(let i=0; i<2; i++) {
+	for(let i=0; i<100; i++) {
 		if(i === 0) seasons.push(generateSeason(initialArray, i));
 		else seasons.push(generateSeason(seasons[i-1], i));
 	}

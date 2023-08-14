@@ -1,5 +1,5 @@
 const Chassis = {
-	sname: 'Chassis',
+	name: 'Chassis',
 	focus: [{
 		name: 'Suspension',
 		technology: [{

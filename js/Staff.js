@@ -178,7 +178,7 @@ function Staff(name, type) {
 		department: [],
 		promotion: [],
 		skills: [],
-		funds: getRandomNumber(1, 10),
+		funds: getRandomNumber(1, 100),
 		cost: getRandomNumber(1, 10),
 		statistics: {
 			wins: [],

@@ -1,6 +1,7 @@
 import { Team } from './Team.js';
 import { settings } from './settings.js';
-import { getRandomNumber } from './getRandomNumber.js';
+import { buyStaffForTeam } from './buyStaffForTeam.js';
+import { simulateSeason } from './simulateSeason.js';
 
 function generateSeason(array, num) {
 	const { drivers, teams, vehicles, circuits, staff } = array;
@@ -15,6 +16,10 @@ function generateSeason(array, num) {
 		circuitResult: [],
 		tierResults: []
 	};
+
+	if(num > 0) {
+		teams.forEach(team => buyStaffForTeam(team, staff));
+	}
     
 	// Fill Staff ownedTeams array if Staff owns a Team
 	const teamsToGenerate = settings.teamsPerSeason - thisSeason.teams.length;
@@ -44,6 +49,8 @@ function generateSeason(array, num) {
 		const tierDriverChampion = tierResult.driverResult[0];
         
 		for(const team of thisSeason.teams) {
+			team.owner.funds += 10;
+			
 			if(team.name === tierTeamChampion.name) {
 				const thisTeamChampionship = {
 					season: thisSeason.name,
@@ -75,7 +82,7 @@ function generateSeason(array, num) {
 	thisSeason.drivers.sort((a, b) => {
 		return b.statistics.titles.length - a.statistics.titles.length;
 	});
-    
+
 	return thisSeason;
 }
 
@@ -150,105 +157,6 @@ function determineDriverPoints(tierDriverResults, tierDriverResultsCheck, driver
 	}
 }
 
-const points = {
-	1: 10,
-	2: 5,
-	3: 2,
-	4: 1
-};
-
-function simulateSeason(season) {
-	season.circuits.forEach(circuit => {
-		const circuitSimulation = simulateCircuit(circuit, season);
-
-		const result = {
-			circuit: circuit,
-			rank: circuitSimulation.rank,
-			circuitResult: circuitSimulation.circuitResult
-		};
-
-		result.circuitResult.forEach((thisResult, index) => {
-			if(points[index + 1]) thisResult.points += points[index + 1];
-		});
-        
-		if(result.circuitResult.length > 0) season.circuitResult.push(result);
-	});
-
-	return season;
-}
-
-function simulateCircuit(circuit, season) {
-	const eligibconsteams = [];
-	const result = {
-		circuit: circuit,
-		season: season,
-		rank: Number,
-		circuitResult: []
-	};
-
-	circuit.grade.forEach(grade => {
-		season.teams.forEach(team => {
-			if(team.rank === grade) {
-				result.rank = grade;
-				eligibconsteams.push(team);
-			}
-		});
-	});
-
-	eligibconsteams.forEach(team => {
-		team.drivers.forEach(driver => {
-			result.circuitResult.push({
-				driver: driver,
-				// circuit: circuit,
-				points: 0,
-				driverResult: getRandomNumber(0, 10)
-			});
-		});
-	});
-
-	result.circuitResult.sort((a, b) => {
-		return b.driverResult - a.driverResult;
-	});
-
-	for(const thisResult in result.circuitResult) {
-		const podiumPlacement = 3;
-		const teamEntries = result.circuitResult[thisResult].driver.team.statistics.entries;
-
-		result.circuitResult[thisResult].driver.statistics.entries.push(result);
-
-		// Adds entries to Teams
-		const teamEntriesCheck = teamEntries.filter(thisEntry => {
-			return (result.circuit.name === thisEntry.circuit.name && result.season.name === thisEntry.season.name);
-		});
-
-		if(teamEntriesCheck.length === 0) {
-			result.circuitResult[thisResult].driver.team.statistics.entries.push(result);
-		}
-        
-		if(Number(thisResult) === 0) {
-			result.circuitResult[thisResult].driver.statistics.wins.push(result);
-			result.circuitResult[thisResult].driver.team.statistics.wins.push(result);
-
-			result.circuitResult[thisResult].driver.team.departments.forEach(department => {
-				department.staff.forEach(thisStaff => {
-					thisStaff.statistics.wins.push(result);
-				});
-			});
-		} else if (Number(thisResult) < podiumPlacement) {
-			result.circuitResult[thisResult].driver.statistics.podiums.push(result);
-			result.circuitResult[thisResult].driver.team.statistics.podiums.push(result);
-            
-			result.circuitResult[thisResult].driver.team.departments.forEach(department => {
-				department.staff.forEach(thisStaff => {
-					thisStaff.statistics.podiums.push(result);
-				});
-			});
-		}
-	}
-
-	return result;
-}
-
 function createSeasonTeams(driverArray, teamsToGenerate, staff) {
 	let potentialTeams = [];
 	let teamOwnerPool = [];
@@ -298,41 +206,6 @@ function createSeasonTeams(driverArray, teamsToGenerate, staff) {
 	}
 
 	return potentialTeams;
-}
-
-function buyStaffForTeam(team, staff) {
-	const potentialStaff = [];
-	const ownerFunds = team.owner.funds;
-
-	staff.forEach(staffMember => {
-		if(ownerFunds > staffMember.cost && staffMember.teamEmployed.length === 0 && staffMember.teamOwned.length === 0) {
-			potentialStaff.push(staffMember);
-			ownerFunds -= staffMember.cost;
-		}
-	});
-    
-	potentialStaff.forEach(potentialMember => {
-		const departmentWithLeastStaff = {};
-		team.departments.forEach(department => {
-			if(!departmentWithLeastStaff.staff || department.staff.length < departmentWithLeastStaff.staff.length) {
-				departmentWithLeastStaff = department;
-			}
-		});
-
-		team.departments.forEach((department, index) => {
-			if(department.name === departmentWithLeastStaff.name) {
-				const contractPrice = potentialMember.cost;
-
-				team.owner.funds -= contractPrice;
-				potentialMember.funds += contractPrice;
-				potentialMember.teamEmployed.push(team);
-				team.departments[index].staff.push(potentialMember);
-			}
-		});
-	});
-
-
-	return team;
 }
 
 export { generateSeason };

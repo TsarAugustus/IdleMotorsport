@@ -12,7 +12,13 @@ let settings = {
 
 	//setInterval related settings
 	daysPerMonth: 30,
-	monthsPerYear: 12
+	monthsPerYear: 12,
+	points: {
+		1: 10,
+		2: 5,
+		3: 2,
+		4: 1
+	}
 };
 
 export { settings };
