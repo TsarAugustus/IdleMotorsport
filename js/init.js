@@ -10,6 +10,8 @@ import { generateSeason } from './generateSeason.js';
 import { createTechnologyScreen } from './createTechnologyScreen.js';
 import { createCircuitScreen } from './createCircuitScreen.js';
 
+import { firstNames, lastNames } from './Names.js';
+
 const tabsFunctions = [{
 	name: 'Technology',
 	function: createTechnologyScreen
@@ -36,7 +38,11 @@ function initialization() {
     
 	//Loops to fill initial Arrays
 	//TODO: Make this less bad
-	for(let i=0; i<settings.initialDriverNumber; i++) initialArray.drivers.push(new Driver(`Driver ${i}`));
+	for(let i=0; i<settings.initialDriverNumber; i++) {
+		let driverFirstName = firstNames[Math.floor(Math.random()*firstNames.length)];
+		let driverLastName = lastNames[Math.floor(Math.random()*lastNames.length)];
+		initialArray.drivers.push(new Driver(`${driverFirstName} ${driverLastName}`));
+	}
 	for(let i=0; i<settings.initialVehicleNumber; i++) initialArray.vehicles.push(new Vehicle(`Vehicle ${i}`));
 	for(let i=0; i<settings.initialStaffNumber; i++) initialArray.staff.push(new Staff(`Staff ${i}`));
 
