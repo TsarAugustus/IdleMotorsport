@@ -10,7 +10,7 @@ function addCircuitsToArray(numberOfCircuits) {
 		// Which allows multiple Races to happen on the same date
 		const circuitGrade = [];
 		const numberOfGrades = getRandomNumber(1, settings.numberOfGrades);
-		for(let i=1; i <= numberOfGrades; i++) circuitGrade.push(i);
+		for(let i=settings.numberOfGrades; i >= numberOfGrades; i--) circuitGrade.push(i);
 
 		const circuit = new Circuit(
 			`Circuit ${i}`,

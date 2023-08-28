@@ -1,7 +1,7 @@
 import { Team } from './Team.js';
 import { settings } from './settings.js';
 import { buyStaffForTeam } from './buyStaffForTeam.js';
-import { simulateSeason } from './simulateSeason.js';
+// import { simulateSeason } from './simulateSeason.js';
 
 function generateSeason(array, num) {
 	const { drivers, teams, vehicles, circuits, staff } = array;
@@ -26,135 +26,64 @@ function generateSeason(array, num) {
 	const initialSeasonGeneration = createSeasonTeams(drivers, teamsToGenerate, thisSeason.staff);
 	if(thisSeason.teams.length < teamsToGenerate) { thisSeason.teams = thisSeason.teams.concat(initialSeasonGeneration);}
 
-	const simulatedSeason = simulateSeason(thisSeason);
+	//TODO: ADD SIMULATION
+	// const simulatedSeason = simulateSeason(thisSeason);
+	// for(const circuit of simulatedSeason.circuitResult) {
+	// 	const tierResultsCheck = thisSeason.tierResults.filter(result => { return result.rank === circuit.rank; });
+	// 	const newTier = {
+	// 		rank: circuit.rank,
+	// 		driverResult: [],
+	// 		teamResult: []
+	// 	};
 
-	for(const circuit of simulatedSeason.circuitResult) {
-		const tierResultsCheck = thisSeason.tierResults.filter(result => { return result.rank === circuit.rank; });
-		const newTier = {
-			rank: circuit.rank,
-			driverResult: [],
-			teamResult: []
-		};
+	// 	if(tierResultsCheck.length === 0) {
+	// 		newTier.driverResult = getTierDriversResults(simulatedSeason.circuitResult);
+	// 		newTier.teamResult = getTierTeamResults(simulatedSeason.circuitResult);
 
-		if(tierResultsCheck.length === 0) {
-			newTier.driverResult = getTierDriversResults(simulatedSeason.circuitResult);
-			newTier.teamResult = getTierTeamResults(simulatedSeason.circuitResult);
+	// 		thisSeason.tierResults.push(newTier);
+	// 	}
+	// }    
 
-			thisSeason.tierResults.push(newTier);
-		}
-	}    
-
-	for(const tierResult of thisSeason.tierResults) {
-		const tierTeamChampion = tierResult.teamResult[0];
-		const tierDriverChampion = tierResult.driverResult[0];
+	// for(const tierResult of thisSeason.tierResults) {
+	// 	const tierTeamChampion = tierResult.teamResult[0];
+	// 	const tierDriverChampion = tierResult.driverResult[0];
         
-		for(const team of thisSeason.teams) {
-			team.owner.funds += 10;
+	// 	for(const team of thisSeason.teams) {
+	// 		team.owner.funds += 10;
 			
-			if(team.name === tierTeamChampion.name) {
-				const thisTeamChampionship = {
-					season: thisSeason.name,
-					rank: tierResult.rank,
-					result: tierResult
-				};
+	// 		if(team.name === tierTeamChampion.name) {
+	// 			const thisTeamChampionship = {
+	// 				season: thisSeason.name,
+	// 				rank: tierResult.rank,
+	// 				result: tierResult
+	// 			};
                 
-				team.statistics.titles.push(thisTeamChampionship);
-			}
-		}
+	// 			team.statistics.titles.push(thisTeamChampionship);
+	// 		}
+	// 	}
         
-		for(const driver of thisSeason.drivers) {
-			if(driver.name === tierDriverChampion.name) {
-				const thisDriverChampionship = {
-					season: thisSeason.name,
-					rank: tierResult.rank,
-					result: tierResult
-				};
+	// 	for(const driver of thisSeason.drivers) {
+	// 		if(driver.name === tierDriverChampion.name) {
+	// 			const thisDriverChampionship = {
+	// 				season: thisSeason.name,
+	// 				rank: tierResult.rank,
+	// 				result: tierResult
+	// 			};
 
-				driver.statistics.titles.push(thisDriverChampionship);
-			}
-		}
-	}
+	// 			driver.statistics.titles.push(thisDriverChampionship);
+	// 		}
+	// 	}
+	// }
 
-	thisSeason.teams.sort((a, b) => {
-		return b.statistics.titles.length - a.statistics.titles.length;
-	});
+	// thisSeason.teams.sort((a, b) => {
+	// 	return b.statistics.titles.length - a.statistics.titles.length;
+	// });
 
-	thisSeason.drivers.sort((a, b) => {
-		return b.statistics.titles.length - a.statistics.titles.length;
-	});
+	// thisSeason.drivers.sort((a, b) => {
+	// 	return b.statistics.titles.length - a.statistics.titles.length;
+	// });
 
 	return thisSeason;
-}
-
-function getTierTeamResults(results) {
-	const tierTeamResults = [];
-
-	for(const result of results) {
-		for(const driverResult of result.circuitResult) {
-			const tierTeamResultsCheck = tierTeamResults.filter(thisResult => { return thisResult.name === driverResult.driver.team.name;});
-
-			determineTeamPoints(tierTeamResults, tierTeamResultsCheck, driverResult);
-		}
-	}
-
-	tierTeamResults.sort((a, b) => {
-		return b.points - a.points;
-	});
-
-	return tierTeamResults;
-}
-
-function determineTeamPoints(tierTeamResults, tierTeamResultsCheck, driverResult) {
-	if(tierTeamResultsCheck.length === 0) {
-		const tierTeam = {
-			name: driverResult.driver.team.name,
-			points: driverResult.points
-		};
-
-		tierTeamResults.push(tierTeam);
-	} else {
-		tierTeamResults.forEach(thisResult => {
-			if(thisResult.name === driverResult.driver.team.name) {
-				thisResult.points += driverResult.points;
-			}
-		});
-	}
-
-}
-
-function getTierDriversResults(results) {
-	const tierDriverResults = [];
-
-	for(const result of results) {
-		for(const driverResult of result.circuitResult) {
-			const tierDriverResultsCheck = tierDriverResults.filter(thisResult => { return thisResult.name === driverResult.driver.name; });
-            
-			determineDriverPoints(tierDriverResults, tierDriverResultsCheck, driverResult);
-		}
-	}
-
-	tierDriverResults.sort((a, b) => {
-		return b.points - a.points;
-	});
-
-	return tierDriverResults;
-}
-
-function determineDriverPoints(tierDriverResults, tierDriverResultsCheck, driverResult) {
-	if(tierDriverResultsCheck.length === 0) {
-		const tierDriver = {
-			name: driverResult.driver.name,
-			points: driverResult.points
-		};
-
-		tierDriverResults.push(tierDriver);
-	} else {
-		tierDriverResults.forEach(thisResult => { 
-			if(thisResult.name === driverResult.driver.name) {
-				thisResult.points += driverResult.points;
-			}
-		});
-	}
 }
 
 function createSeasonTeams(driverArray, teamsToGenerate, staff) {

@@ -14,11 +14,22 @@ body {
 	width: 100%;
 }
 
+/**/
+
 #info {
 	height: 100%;
 	border: 1px solid green;
 	width: 100%;
+	display: flex;
+	flex-direction: row;
 }
+
+.season {
+	border: 1px solid black;
+	width: 15em;
+}
+
+/**/
 
 #map {
     display: flex;

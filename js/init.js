@@ -12,6 +12,9 @@ import { createCircuitScreen } from './createCircuitScreen.js';
 
 import { firstNames, lastNames } from './Names.js';
 
+import { simulateCircuit } from './simulateCircuit.js';
+import { evaluateSeason } from './evaluateSeason.js';
+
 const tabsFunctions = [{
 	name: 'Technology',
 	function: createTechnologyScreen
@@ -23,8 +26,11 @@ const tabsFunctions = [{
 let pause = Boolean;
 let day = 1;
 let month = 1;
-let year = 1;
+let year = 0;
 let circuits = [];
+
+let seasons = [];
+let currentSeason = {};
 
 function initialization() {
 
@@ -59,13 +65,15 @@ function initialization() {
 		if(!pause) day++;
 	});
 
-	const seasons = [];
-	for(let i=0; i<100; i++) {
-		if(i === 0) seasons.push(generateSeason(initialArray, i));
-		else seasons.push(generateSeason(seasons[i-1], i));
-	}
+	// const seasons = [];
+	// for(let i=0; i<100; i++) {
+	// 	if(i === 0) seasons.push(generateSeason(initialArray, i));
+	// 	else seasons.push(generateSeason(seasons[i-1], i));
+	// }
 
-	console.log(seasons);
+	currentSeason = generateSeason(initialArray, year);
+
+	// console.log(currentSeason);
     
 	startInterval();
 }
@@ -107,19 +115,29 @@ function startInterval() {
         
 		if(!pause) {
 			circuits.forEach(circuit => {
-				if(month === circuit.month && day === circuit.day) pause = true;
+				if(month === circuit.month && day === circuit.day) {
+					currentSeason.circuitResult.push(simulateCircuit(circuit, currentSeason));
+					// pause = true;
+				}
 			});
 			calculateDate();
 		} else if(pause) {
 			// When the game is paused  
 		}    
-	}, 1000);
+	}, 0);
 }
 
 function calculateDate() {
 	if(month >= settings.monthsPerYear && day >= settings.daysPerMonth) {
+		pause = true;
 		month = 0;
 		year++;
+
+		currentSeason = evaluateSeason(currentSeason);
+		seasons.push(currentSeason);
+		currentSeason = generateSeason(seasons[year - 1], year);
+
+		updateSeasons();
 	}
 
 	if(day >= settings.daysPerMonth) {
@@ -130,6 +148,47 @@ function calculateDate() {
 	if(!pause) {
 		day++;
 	}
+}
+
+function updateSeasons() {
+	let infoDiv = document.getElementById('info');
+	infoDiv.innerHTML = '';
+
+	seasons.forEach(season => {
+		let thisSeasonDiv = document.createElement('div');
+		thisSeasonDiv.id = season.name;
+		thisSeasonDiv.classList.add('season');
+
+		let seasonHeader = document.createElement('span');
+		seasonHeader.innerHTML = season.name;
+		thisSeasonDiv.appendChild(seasonHeader);
+
+		season.tierResults.forEach(tier => {
+			let thisTierDiv = document.createElement('div');
+			thisTierDiv.id = tier.rank;
+			
+			let tierHeader = document.createElement('span');
+			tierHeader.innerHTML = tier.rank;
+			thisTierDiv.appendChild(tierHeader);
+
+			tier.driverResult.forEach(driver => {
+				// console.log(driver)
+				let thisDriverDiv = document.createElement('div');
+				thisDriverDiv.id = driver.name;
+
+				let driverInfo = document.createElement('span');
+				driverInfo.innerHTML = `${driver.name} - ${driver.points}`;
+				thisDriverDiv.appendChild(driverInfo);
+
+				thisTierDiv.appendChild(thisDriverDiv);
+			})
+
+			thisSeasonDiv.appendChild(thisTierDiv);
+		})
+
+
+		document.getElementById('info').appendChild(thisSeasonDiv);
+	})
 }
 
 initialization();

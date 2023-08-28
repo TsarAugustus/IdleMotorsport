@@ -3,7 +3,7 @@ let settings = {
 	initialDriverNumber: 100,
 	// initialTeamNumber: 10,
 	initialVehicleNumber: 0,
-	initialCircuitNumber: 100,
+	initialCircuitNumber: 22,
 	initialStaffNumber: 100,
 
 	numberOfGrades: 5,
@@ -14,10 +14,16 @@ let settings = {
 	daysPerMonth: 30,
 	monthsPerYear: 12,
 	points: {
-		1: 10,
-		2: 5,
-		3: 2,
-		4: 1
+		1: 25,
+		2: 18,
+		3: 15,
+		4: 12,
+		5: 10,
+		6: 8,
+		7: 6,
+		8: 4,
+		9: 2,
+		10: 1
 	}
 };
 
