@@ -1,4 +1,5 @@
-import { settings } from './settings.js'
+import { settings } from './settings.js';
+import { simulateCircuit } from './simulateCircuit.js'; 
 
 function simulateSeason(season) {
 	season.circuits.forEach(circuit => {

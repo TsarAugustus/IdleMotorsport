@@ -172,13 +172,14 @@ const skills = [{
 function Staff(name, type) {
 	let thisStaff = {
 		name: name,
-		teamEmployed: [],
-		teamOwned: [],
+		teamEmployed: {},
+		teamsOwned: [],
 		type: type,
 		department: [],
 		promotion: [],
 		skills: [],
-		funds: getRandomNumber(1, 100),
+		contractLength: Number,
+		funds: getRandomNumber(1, 10),
 		cost: getRandomNumber(1, 10),
 		statistics: {
 			wins: [],
@@ -194,7 +195,6 @@ function Staff(name, type) {
 	if(thisStaff.type === undefined) {
 		let types = getLowestStaffTypes(Types);
 		let staffType = types[Math.floor(Math.random() * types.length)];
-
 		thisStaff.type = staffType.name;
 		thisStaff.department = staffType.department;
 		thisStaff.promotion = staffType.promotion;
@@ -210,7 +210,7 @@ function Staff(name, type) {
 function getLowestStaffTypes(Types) {
 	let rank;
 	let lowestStaffTypes = [];
-	let lowestType = Types.forEach(type => { if(!rank || rank > type.rank) rank = type.rank; });
+	Types.forEach(type => { if(!rank || rank > type.rank) rank = type.rank; });
 
 	for(let staffTypes of Types) if(staffTypes.rank === rank) lowestStaffTypes.push(staffTypes);
 

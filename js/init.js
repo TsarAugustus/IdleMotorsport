@@ -1,10 +1,9 @@
 import { settings } from './settings.js';
 import { Driver } from './Driver.js';
-import { Team } from './Team.js';
-import { Vehicle } from './Vehicle.js';
+// import { Team } from './Team.js';
+// import { Vehicle } from './Vehicle.js';
 import { Staff } from './Staff.js';
 
-import { getRandomNumber } from './getRandomNumber.js';
 import { addCircuitsToArray } from './addCircuitsToArray.js';
 import { generateSeason } from './generateSeason.js';
 import { createTechnologyScreen } from './createTechnologyScreen.js';
@@ -49,7 +48,7 @@ function initialization() {
 		let driverLastName = lastNames[Math.floor(Math.random()*lastNames.length)];
 		initialArray.drivers.push(new Driver(`${driverFirstName} ${driverLastName}`));
 	}
-	for(let i=0; i<settings.initialVehicleNumber; i++) initialArray.vehicles.push(new Vehicle(`Vehicle ${i}`));
+	// for(let i=0; i<settings.initialVehicleNumber; i++) initialArray.vehicles.push(new Vehicle(`Vehicle ${i}`));
 	for(let i=0; i<settings.initialStaffNumber; i++) initialArray.staff.push(new Staff(`Staff ${i}`));
 
 	circuits = initialArray.circuits;
@@ -129,22 +128,25 @@ function startInterval() {
 
 function calculateDate() {
 	if(month >= settings.monthsPerYear && day >= settings.daysPerMonth) {
-		pause = true;
+		// pause = true;
 		month = 0;
 		year++;
 
+		console.log(currentSeason);
 		currentSeason = evaluateSeason(currentSeason);
 		seasons.push(currentSeason);
-		currentSeason = generateSeason(seasons[year - 1], year);
-
 		updateSeasons();
+	}
+	
+	if(day === 1 && month === 1 && year > 0) {
+		currentSeason = generateSeason(seasons[year - 1], year);
 	}
 
 	if(day >= settings.daysPerMonth) {
 		day = 0;
 		month++;
 	}
-
+	
 	if(!pause) {
 		day++;
 	}
@@ -172,23 +174,23 @@ function updateSeasons() {
 			thisTierDiv.appendChild(tierHeader);
 
 			tier.driverResult.forEach(driver => {
-				// console.log(driver)
 				let thisDriverDiv = document.createElement('div');
 				thisDriverDiv.id = driver.name;
-
+				
 				let driverInfo = document.createElement('span');
-				driverInfo.innerHTML = `${driver.name} - ${driver.points}`;
+
+				driverInfo.innerHTML = `${driver.name} - ${driver.team} - ${driver.points}`;
 				thisDriverDiv.appendChild(driverInfo);
 
 				thisTierDiv.appendChild(thisDriverDiv);
-			})
+			});
 
 			thisSeasonDiv.appendChild(thisTierDiv);
-		})
+		});
 
 
 		document.getElementById('info').appendChild(thisSeasonDiv);
-	})
+	});
 }
 
 initialization();

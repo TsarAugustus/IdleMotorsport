@@ -1,3 +1,4 @@
+// import { getRandomNumber } from './getRandomNumber.js';
 import { getRandomNumber } from './getRandomNumber.js';
 import { settings } from './settings.js';
 
@@ -21,12 +22,20 @@ function simulateCircuit(circuit, season) {
 
 	eligibleTeams.forEach(team => {
 		team.drivers.forEach(driver => {
-			result.circuitResult.push({
+			let thisResult = {
 				driver: driver,
 				// circuit: circuit,
 				points: 0,
-				driverResult: getRandomNumber(0, 10)
+				driverResult: 0
+			};
+
+			circuit.path.forEach(path => {
+				if(path.type === 'Corner') {
+					thisResult.driverResult += path.skill * driver.skills.corneringAbility / getRandomNumber(1, 10);
+				}
 			});
+
+			result.circuitResult.push(thisResult);
 		});
 	});
 

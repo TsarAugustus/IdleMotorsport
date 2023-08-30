@@ -7,8 +7,9 @@ let settings = {
 	initialStaffNumber: 100,
 
 	numberOfGrades: 5,
-	teamsPerSeason: 10,
-	driversPerTeam: 2,
+	teamsPerSeason: 20,
+	driversPerTeam: 4,
+	staffPerDepartmentLimit: 5,
 
 	//setInterval related settings
 	daysPerMonth: 30,

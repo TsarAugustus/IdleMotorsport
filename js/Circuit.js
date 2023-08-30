@@ -1,3 +1,5 @@
+import { getRandomNumber } from './getRandomNumber.js';
+
 function Circuit(name, day, month, grade) {
 	const thisCircuit = {
 		name: name,
@@ -18,6 +20,7 @@ function createCircuitPath(corners, straights) {
 		const pathToAdd = {
 			type: ''
 		};
+		pathToAdd.skill = (1, 10);
         
 		if(choice === 0 && corners > 0) { 
 			//Corner
@@ -49,10 +52,6 @@ function createStraight(pathToAdd) {
 	pathToAdd.type = 'Straight';
 
 	return pathToAdd;
-}
-
-function getRandomNumber(min, max) {
-	return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
 export { Circuit };

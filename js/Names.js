@@ -1,5 +1,3 @@
-// List of First/
-
 const firstNames = [
 	'A.J.',
 	'Adolf',
@@ -472,9 +470,9 @@ const firstNames = [
 	'Yves',
 	'Zhou',
 	'Zsolt'
-	];
-	
-	const lastNames = [
+];
+
+const lastNames = [
 	'Abate',
 	'Abecassis',
 	'Acheson',
@@ -1276,6 +1274,6 @@ const firstNames = [
 	'Zonta',
 	'Zorzi',
 	'Zunino',
-	];
+];
 	
-	export { firstNames, lastNames}
+export { firstNames, lastNames};

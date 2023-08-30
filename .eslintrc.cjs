@@ -38,6 +38,5 @@ module.exports = {
 			'error',
 			'always'
 		]
-	},
-	'prefer-const': true
+	}
 };

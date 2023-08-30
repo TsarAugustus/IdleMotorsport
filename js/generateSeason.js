@@ -1,10 +1,16 @@
 import { Team } from './Team.js';
 import { settings } from './settings.js';
 import { buyStaffForTeam } from './buyStaffForTeam.js';
+import { getRandomNumber } from './getRandomNumber.js';
 // import { simulateSeason } from './simulateSeason.js';
 
 function generateSeason(array, num) {
-	const { drivers, teams, vehicles, circuits, staff } = array;
+	let drivers = array ? array.drivers : [];
+	let teams = array ? array.teams : [];
+	let vehicles = array ? array.vehicles : [];
+	let circuits = array ? array.circuits : [];
+	let staff = array ? array.staff : [];
+	// const { drivers, teams, vehicles, circuits, staff } = array;
     
 	const thisSeason = {
 		name: `Season ${num}`,
@@ -16,77 +22,66 @@ function generateSeason(array, num) {
 		circuitResult: [],
 		tierResults: []
 	};
-
+	const teamsToGenerate = settings.teamsPerSeason - thisSeason.teams.length;
+	const initialSeasonGeneration = createSeasonTeams(drivers, teamsToGenerate, thisSeason.staff, thisSeason.drivers, thisSeason);
+	
 	if(num > 0) {
-		teams.forEach(team => buyStaffForTeam(team, staff));
+		teams.forEach(team => buyStaffForTeam(team, staff, drivers, thisSeason));
+		
+		//Removes team if they don't have any drivers
+		teams.forEach(team => {
+			if(team.drivers.length === 0) 
+			{	
+				thisSeason.staff.forEach(thisStaff => {
+					if(team.owner.name === thisStaff.name) {
+						// thisStaff.teamsOwned = thisStaff.teamsOwned.filter(thisTeam => thisTeam.name !== team.name);
+					}
+				});
+
+				// team.owner = {};
+				// if(!team.owner)
+				thisSeason.teams = thisSeason.teams.filter(thisTeam => thisTeam.name === team.name);
+			}
+		});
 	}
     
 	// Fill Staff ownedTeams array if Staff owns a Team
-	const teamsToGenerate = settings.teamsPerSeason - thisSeason.teams.length;
-	const initialSeasonGeneration = createSeasonTeams(drivers, teamsToGenerate, thisSeason.staff);
 	if(thisSeason.teams.length < teamsToGenerate) { thisSeason.teams = thisSeason.teams.concat(initialSeasonGeneration);}
 
-	//TODO: ADD SIMULATION
-	// const simulatedSeason = simulateSeason(thisSeason);
-	// for(const circuit of simulatedSeason.circuitResult) {
-	// 	const tierResultsCheck = thisSeason.tierResults.filter(result => { return result.rank === circuit.rank; });
-	// 	const newTier = {
-	// 		rank: circuit.rank,
-	// 		driverResult: [],
-	// 		teamResult: []
-	// 	};
+	thisSeason.teams.forEach(team => {
+		generateVehicle(team);
+	});
 
-	// 	if(tierResultsCheck.length === 0) {
-	// 		newTier.driverResult = getTierDriversResults(simulatedSeason.circuitResult);
-	// 		newTier.teamResult = getTierTeamResults(simulatedSeason.circuitResult);
-
-	// 		thisSeason.tierResults.push(newTier);
-	// 	}
-	// }    
-
-	// for(const tierResult of thisSeason.tierResults) {
-	// 	const tierTeamChampion = tierResult.teamResult[0];
-	// 	const tierDriverChampion = tierResult.driverResult[0];
-        
-	// 	for(const team of thisSeason.teams) {
-	// 		team.owner.funds += 10;
-			
-	// 		if(team.name === tierTeamChampion.name) {
-	// 			const thisTeamChampionship = {
-	// 				season: thisSeason.name,
-	// 				rank: tierResult.rank,
-	// 				result: tierResult
-	// 			};
-                
-	// 			team.statistics.titles.push(thisTeamChampionship);
-	// 		}
-	// 	}
-        
-	// 	for(const driver of thisSeason.drivers) {
-	// 		if(driver.name === tierDriverChampion.name) {
-	// 			const thisDriverChampionship = {
-	// 				season: thisSeason.name,
-	// 				rank: tierResult.rank,
-	// 				result: tierResult
-	// 			};
-
-	// 			driver.statistics.titles.push(thisDriverChampionship);
-	// 		}
-	// 	}
-	// }
-
-	// thisSeason.teams.sort((a, b) => {
-	// 	return b.statistics.titles.length - a.statistics.titles.length;
-	// });
-
-	// thisSeason.drivers.sort((a, b) => {
-	// 	return b.statistics.titles.length - a.statistics.titles.length;
-	// });
+	// generateVehicles(thisSeason.teams);
 
 	return thisSeason;
 }
 
-function createSeasonTeams(driverArray, teamsToGenerate, staff) {
+function generateVehicle(team) {
+	let teamStaff = [];
+
+	let thisVehicle = {
+		name: `${team.name} Vehicle ${team.vehicles.length}`,
+		num: 0
+	};
+
+	team.departments.forEach(department => {
+		department.staff.forEach(staff => {
+			teamStaff.push(staff);
+		});
+	});
+	
+	teamStaff.forEach(staff => {
+		staff.skills.forEach(skill => {
+			thisVehicle.num += skill.number * getRandomNumber(1, 10);
+		});
+	});
+
+	team.currentVehicle = thisVehicle;
+	team.vehicles.push(thisVehicle);
+}
+
+function createSeasonTeams(driverArray, teamsToGenerate, staff, drivers, season) {
 	let potentialTeams = [];
 	let teamOwnerPool = [];
 
@@ -102,12 +97,12 @@ function createSeasonTeams(driverArray, teamsToGenerate, staff) {
 		});
 
 		if(teamOwnerPool.length > 0) potentialOwner = teamOwnerPool[Math.floor(Math.random() * teamOwnerPool.length)];
+		
 		const potentialDrivers = [];
 		let ownerFunds = potentialOwner.funds;
 
-
 		driverArray.forEach(driver => {
-			if(driver.cost <= ownerFunds && potentialDrivers.length < settings.driversPerTeam && !driver.team) {
+			if(driver.cost <= ownerFunds && potentialDrivers.length < settings.driversPerTeam && !driver.team.name) {
 				potentialDrivers.push(driver);
 				ownerFunds -= driver.cost;
 			}
@@ -121,17 +116,18 @@ function createSeasonTeams(driverArray, teamsToGenerate, staff) {
 			team.drivers.push(driver);
 			potentialOwner.funds -= contractCost;
 			driver.funds += contractCost;
+			driver.contractLength = 1;
 		}
 
 		if(team.drivers.length > 0) potentialTeams.push(team);
 
 		staff.forEach((thisStaff, index) => {
 			if(team.owner.name === thisStaff.name) {
-				staff[index].teamOwned.push(team);
+				staff[index].teamsOwned.push(team);
 			}
 		});
-
-		team = buyStaffForTeam(team, staff);
+	
+		team = buyStaffForTeam(team, staff, drivers, season);
 	}
 
 	return potentialTeams;

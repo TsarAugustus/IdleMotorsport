@@ -1,5 +1,4 @@
 function evaluateSeason(season) {
-
 	season.circuitResult.forEach(circuit => {
 		const tierResultsCheck = season.tierResults.filter(result => { return result.rank === circuit.rank; });
 		const newTier = {
@@ -10,19 +9,18 @@ function evaluateSeason(season) {
 
 		if(tierResultsCheck.length === 0) {
 			newTier.driverResult = getTierDriversResults(season.circuitResult);
-			newTier.teamResult = getTierTeamResults(season.circuitResult);
+			newTier.teamResult = getTierTeamResults(season.circuitResult, season);
 
 			season.tierResults.push(newTier);
 		}
 	});
 
 	season.tierResults.forEach(tierResult => {
+		//TODO: CLEAN THIS UP AND FIX
 		const tierTeamChampion = tierResult.teamResult[0];
 		const tierDriverChampion = tierResult.driverResult[0];
         
-		for(const team of season.teams) {
-			team.owner.funds += 10;
-			
+		for(const team of season.teams) {			
 			if(team.name === tierTeamChampion.name) {
 				const thisTeamChampionship = {
 					season: season.name,
@@ -35,7 +33,7 @@ function evaluateSeason(season) {
 		}
 
 		season.drivers.forEach(driver => {
-			if(driver.name === tierDriverChampion.name) {
+			if(driver.name === tierDriverChampion) {
 				const thisDriverChampionship = {
 					season: season.name,
 					rank: tierResult.rank,
@@ -55,10 +53,40 @@ function evaluateSeason(season) {
 		return b.statistics.titles.length - a.statistics.titles.length;
 	});
 
+	season.staff.forEach(staff => {
+		if(staff.teamEmployed.name && staff.contractLength > 0 && staff.teamsOwned.length === 0) {
+			staff.contractLength--;
+			staff.cost++;
+		}
+		if(staff.contractLength === 0) {
+			// console.log(`STAFF LEAVING ${staff.name}`);
+			staff.teamEmployed = {};
+		}
+	});
+
+	season.drivers.forEach(driver => {
+		if(driver.team.name && driver.contractLength > 0) {
+			driver.contractLength--;
+			driver.cost++;
+		}
+		if(driver.contractLength === 0) {		
+			season.teams.forEach(team => {
+				team.drivers.forEach(thisDriver => {
+					if(thisDriver.name === driver.name) {
+						team.drivers = team.drivers.filter(teamDriver => teamDriver.name !== driver.name);
+					}
+				});
+			});
+
+			driver.team = {};
+		}
+	});
+	
+
 	return season;
 }
 
-function getTierTeamResults(results) {
+function getTierTeamResults(results, season) {
 	const tierTeamResults = [];
 
 	results.forEach(result => {
@@ -71,6 +99,25 @@ function getTierTeamResults(results) {
 
 	tierTeamResults.sort((a, b) => {
 		return b.points - a.points;
+	});
+
+	let teamPrizeMoney = {
+		1: 100,
+		2: 90,
+		3: 80,
+		4: 70,
+		5: 60,
+
+		else: 50
+	};
+
+	season.teams.forEach(team => {
+		tierTeamResults.forEach((tierTeam, index) => {
+			if(team.name === tierTeam.name) {
+				if(teamPrizeMoney[index + 1]) team.owner.funds += teamPrizeMoney[index + 1];
+				else team.owner.funds += teamPrizeMoney.else;
+			}
+		});
 	});
 
 	return tierTeamResults;
@@ -116,7 +163,8 @@ function determineDriverPoints(tierDriverResults, tierDriverResultsCheck, driver
 	if(tierDriverResultsCheck.length === 0) {
 		const tierDriver = {
 			name: driverResult.driver.name,
-			points: driverResult.points
+			points: driverResult.points,
+			team: driverResult.driver.team.name
 		};
 
 		tierDriverResults.push(tierDriver);
@@ -129,4 +177,4 @@ function determineDriverPoints(tierDriverResults, tierDriverResultsCheck, driver
 	}
 }
 
-export { evaluateSeason }
+export { evaluateSeason };

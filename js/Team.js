@@ -8,6 +8,8 @@ function Team(name) {
 		drivers: [],
 		departments: [],
 		rank: settings.numberOfGrades,
+		currentVehicle: {},
+		vehicles: [],
 		statistics: {
 			wins: [],
 			podiums: [],
