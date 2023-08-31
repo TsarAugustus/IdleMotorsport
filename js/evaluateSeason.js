@@ -1,4 +1,4 @@
-function evaluateSeason(season) {
+function evaluateSeason(season, previousSeasons) {
 	season.circuitResult.forEach(circuit => {
 		const tierResultsCheck = season.tierResults.filter(result => { return result.rank === circuit.rank; });
 		const newTier = {
@@ -9,7 +9,7 @@ function evaluateSeason(season) {
 
 		if(tierResultsCheck.length === 0) {
 			newTier.driverResult = getTierDriversResults(season.circuitResult);
-			newTier.teamResult = getTierTeamResults(season.circuitResult, season);
+			newTier.teamResult = getTierTeamResults(season.circuitResult, season, previousSeasons);
 
 			season.tierResults.push(newTier);
 		}
@@ -19,27 +19,27 @@ function evaluateSeason(season) {
 		//TODO: CLEAN THIS UP AND FIX
 		const tierTeamChampion = tierResult.teamResult[0];
 		const tierDriverChampion = tierResult.driverResult[0];
-        
-		for(const team of season.teams) {			
+
+		season.teams.forEach(team => {
 			if(team.name === tierTeamChampion.name) {
 				const thisTeamChampionship = {
 					season: season.name,
 					rank: tierResult.rank,
 					result: tierResult
 				};
-                
+				
 				team.statistics.titles.push(thisTeamChampionship);
 			}
-		}
+		});
 
 		season.drivers.forEach(driver => {
-			if(driver.name === tierDriverChampion) {
+			if(driver.name === tierDriverChampion.name) {
 				const thisDriverChampionship = {
 					season: season.name,
 					rank: tierResult.rank,
 					result: tierResult
 				};
-
+				
 				driver.statistics.titles.push(thisDriverChampionship);
 			}
 		});
@@ -86,14 +86,14 @@ function evaluateSeason(season) {
 	return season;
 }
 
-function getTierTeamResults(results, season) {
+function getTierTeamResults(results, season, previousSeasons) {
 	const tierTeamResults = [];
 
 	results.forEach(result => {
 		result.circuitResult.forEach(driverResult => {
 			const tierTeamResultsCheck = tierTeamResults.filter(thisResult => { return thisResult.name === driverResult.driver.team.name;});
 
-			determineTeamPoints(tierTeamResults, tierTeamResultsCheck, driverResult);
+			determineTeamPoints(tierTeamResults, tierTeamResultsCheck, driverResult, previousSeasons);
 		});
 	});
 
@@ -123,12 +123,17 @@ function getTierTeamResults(results, season) {
 	return tierTeamResults;
 }
 
-function determineTeamPoints(tierTeamResults, tierTeamResultsCheck, driverResult) {
+function determineTeamPoints(tierTeamResults, tierTeamResultsCheck, driverResult, previousSeasons) {
 	if(tierTeamResultsCheck.length === 0) {
+		// console.log(tierTeamResults);
 		const tierTeam = {
 			name: driverResult.driver.team.name,
-			points: driverResult.points
+			points: driverResult.points,
+			teamInfo: driverResult.driver.team,
+			titles: 0
 		};
+
+		// console.log(previousSeasons);
 
 		tierTeamResults.push(tierTeam);
 	} else {
@@ -164,7 +169,8 @@ function determineDriverPoints(tierDriverResults, tierDriverResultsCheck, driver
 		const tierDriver = {
 			name: driverResult.driver.name,
 			points: driverResult.points,
-			team: driverResult.driver.team.name
+			team: driverResult.driver.team.name,
+			driverInfo: driverResult.driver
 		};
 
 		tierDriverResults.push(tierDriver);
