@@ -4,31 +4,41 @@ import { settings } from './settings.js';
 function buyStaffForTeam(team, staff, drivers, season) {
 	const potentialStaff = [];
 	let ownerFunds = team.owner.funds;
-
 	if(team.drivers.length < settings.driversPerTeam) {
+		// console.log(team.name, team.drivers.length, settings.driversPerTeam, team.drivers);
 		const potentialDrivers = [];
-		let ownerFunds = team.funds;
+
+		drivers = drivers.sort(function(a, b) {
+			return a.cost - b.cost;
+		});
+
 		drivers.forEach(driver => {
+			// console.log(driver.cost <= ownerFunds, potentialDrivers.length < settings.driversPerTeam, !driver.team.name);
 			if(driver.cost <= ownerFunds && potentialDrivers.length < settings.driversPerTeam && !driver.team.name) {
 				potentialDrivers.push(driver);
 				ownerFunds -= driver.cost;
 			}
 		});
         
-		for(const driver of potentialDrivers) {
+		for(let driver of potentialDrivers) {
 			const contractCost = driver.cost;
 
 			team.owner = team;
 			driver.team = team;
 			team.drivers.push(driver);
-			team.funds -= contractCost;
+			// console.log(team.drivers, potentialDrivers.length);
+			team.owner.funds -= contractCost;
 			driver.funds += contractCost;
 			driver.contractLength = getRandomNumber(1, 5);
 		}
 	}
+	
+	staff.drivers = staff.sort(function(a, b) {
+		return a.cost - b.cost;
+	});
 
 	staff.forEach(staffMember => {
-		if(ownerFunds > staffMember.cost && !staffMember.teamEmployed.name && staffMember.teamsOwned.length === 0) {
+		if(ownerFunds > staffMember.cost && !staffMember.team && staffMember.teamsOwned.length === 0) {
 			potentialStaff.push(staffMember);
 			ownerFunds -= staffMember.cost;
 		}
@@ -51,14 +61,12 @@ function buyStaffForTeam(team, staff, drivers, season) {
 				potentialMember.contractLength = getRandomNumber(1, 5);
 				potentialMember.team = team;
 				team.departments[index].staff.push(potentialMember);
-				// console.log(`STAFF BOUGHT: ${potentialMember.name} - ${potentialMember.contractLength}`);
 				//Works, but should be better
-				// console.log(season);
 				season.staff.filter(staffMember => staffMember.name === potentialMember.name ? staffMember = potentialMember : '');
 			}
 		});
 	});
-
+	// console.log(team.drivers);
 	return team;
 }
 

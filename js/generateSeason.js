@@ -1,18 +1,21 @@
-import { Team } from './Team.js';
 import { settings } from './settings.js';
 import { buyStaffForTeam } from './buyStaffForTeam.js';
-import { getRandomNumber } from './getRandomNumber.js';
-// import { simulateSeason } from './simulateSeason.js';
+import { createSeasonTeams } from './createSeasonTeams.js';
+import { Driver } from './Driver.js';
+import { retireTeams } from './retireTeams.js';
+import { restartRetiredTeam } from './restartRetiredTeam.js';
+import { generateVehicle } from './generateVehicle.js';
 
-function generateSeason(array, num) {
+import { firstNames, lastNames } from './Names.js';
+
+function generateSeason(array, num, retiredTeams) {
 	let drivers = array ? array.drivers : [];
 	let teams = array ? array.teams : [];
 	let vehicles = array ? array.vehicles : [];
 	let circuits = array ? array.circuits : [];
 	let staff = array ? array.staff : [];
-	// const { drivers, teams, vehicles, circuits, staff } = array;
     
-	const thisSeason = {
+	let thisSeason = {
 		name: `Season ${num}`,
 		drivers: drivers,
 		teams: teams,
@@ -22,115 +25,50 @@ function generateSeason(array, num) {
 		circuitResult: [],
 		tierResults: []
 	};
-	const teamsToGenerate = settings.teamsPerSeason - thisSeason.teams.length;
-	const initialSeasonGeneration = createSeasonTeams(drivers, teamsToGenerate, thisSeason.staff, thisSeason.drivers, thisSeason);
+
+	for(let i=0; i<settings.initialDriverNumber - thisSeason.drivers.length; i++) {
+		let driverFirstName = firstNames[Math.floor(Math.random()*firstNames.length)];
+		let driverLastName = lastNames[Math.floor(Math.random()*lastNames.length)];
+		thisSeason.drivers.push(new Driver(`${driverFirstName} ${driverLastName}`));
+	}
 	
 	if(num > 0) {
-		teams.forEach(team => buyStaffForTeam(team, staff, drivers, thisSeason));
-		
-		//Removes team if they don't have any drivers
-		teams.forEach(team => {
-			if(team.drivers.length === 0) 
-			{	
-				thisSeason.staff.forEach(thisStaff => {
-					if(team.owner.name === thisStaff.name) {
-						// thisStaff.teamsOwned = thisStaff.teamsOwned.filter(thisTeam => thisTeam.name !== team.name);
-					}
-				});
-
-				// team.owner = {};
-				// if(!team.owner)
-				thisSeason.teams = thisSeason.teams.filter(thisTeam => thisTeam.name === team.name);
-			}
-		});
+		let generation = generateSeasonTeams(teams, staff, drivers, thisSeason, retiredTeams);
+		thisSeason = generation.season;
+		retiredTeams = generation.retiredTeams;
 	}
-    
+	
+	const teamsToGenerate = settings.teamsPerSeason - thisSeason.teams.length;
+	const initialSeasonGeneration = createSeasonTeams(drivers, teamsToGenerate, thisSeason.staff, thisSeason.drivers, thisSeason, retiredTeams);
+
 	// Fill Staff ownedTeams array if Staff owns a Team
-	if(thisSeason.teams.length < teamsToGenerate) { thisSeason.teams = thisSeason.teams.concat(initialSeasonGeneration);}
-
-	thisSeason.teams.forEach(team => {
-		generateVehicle(team);
-	});
-
-	// generateVehicles(thisSeason.teams);
+	if(thisSeason.teams.length < teamsToGenerate) { thisSeason.teams = thisSeason.teams.concat(initialSeasonGeneration); }
+	//Generate Seasonal Vehicles for each Team
+	thisSeason.teams.forEach(team => generateVehicle(team) );
 
 	return thisSeason;
 }
 
-function generateVehicle(team) {
-	let teamStaff = [];
-
-	let thisVehicle = {
-		name: `${team.name} Vehicle ${team.vehicles.length}`,
-		num: 0
-	};
-
-	team.departments.forEach(department => {
-		department.staff.forEach(staff => {
-			teamStaff.push(staff);
-		});
-	});
-	
-	teamStaff.forEach(staff => {
-		staff.skills.forEach(skill => {
-			thisVehicle.num += skill.number * getRandomNumber(1, 10);
-		});
-	});
-
-	team.currentVehicle = thisVehicle;
-	team.vehicles.push(thisVehicle);
-}
-
-function createSeasonTeams(driverArray, teamsToGenerate, staff, drivers, season) {
-	let potentialTeams = [];
-	let teamOwnerPool = [];
-
-	for(let i=0; i<teamsToGenerate; i++) {
-		let team = new Team(`Team ${i}`);
-		let potentialOwner = { funds: 0 };
-
-		teamOwnerPool = staff.filter(member => { 
-			let memberToReturn = {};
-
-			if(member.teamEmployed.length === 0 && member.teamOwned.length === 0) memberToReturn = member;
-			return memberToReturn;
-		});
-
-		if(teamOwnerPool.length > 0) potentialOwner = teamOwnerPool[Math.floor(Math.random() * teamOwnerPool.length)];
+function generateSeasonTeams(teams, staff, drivers, season, retiredTeams) {
+	teams.forEach(team => buyStaffForTeam(team, staff, drivers, season));
 		
-		const potentialDrivers = [];
-		let ownerFunds = potentialOwner.funds;
+	//Removes team if they don't have any drivers
+	let teamsToRetire = retireTeams(teams, season, retiredTeams);
+	teams = teamsToRetire.teams;
+	season = teamsToRetire.season;
+	retiredTeams = teamsToRetire.retiredTeams;
 
-		driverArray.forEach(driver => {
-			if(driver.cost <= ownerFunds && potentialDrivers.length < settings.driversPerTeam && !driver.team.name) {
-				potentialDrivers.push(driver);
-				ownerFunds -= driver.cost;
-			}
-		});
-        
-		for(const driver of potentialDrivers) {
-			const contractCost = driver.cost;
-
-			team.owner = potentialOwner;
-			driver.team = team;
-			team.drivers.push(driver);
-			potentialOwner.funds -= contractCost;
-			driver.funds += contractCost;
-			driver.contractLength = 1;
+	for(let i=0; i<settings.teamsPerSeason - season.teams.length; i++) {
+		let team = retiredTeams[Math.floor(Math.random() * retiredTeams.length)];
+		let restartedTeam;
+		if(retiredTeams.length > 0) restartedTeam = restartRetiredTeam(team, season.staff, season.drivers, season);
+		console.log(`Team ${team.name} Restarted`);
+		if(restartedTeam !== undefined) {
+			season.teams.push(restartedTeam);
+			retiredTeams = retiredTeams.filter(thisTeam => thisTeam.name !== restartedTeam.name);
 		}
-
-		if(team.drivers.length > 0) potentialTeams.push(team);
-
-		staff.forEach((thisStaff, index) => {
-			if(team.owner.name === thisStaff.name) {
-				staff[index].teamsOwned.push(team);
-			}
-		});
-	
-		team = buyStaffForTeam(team, staff, drivers, season);
 	}
-
-	return potentialTeams;
+	return { season, retiredTeams };
 }
 
 export { generateSeason };

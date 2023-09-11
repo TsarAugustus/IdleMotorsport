@@ -21,14 +21,19 @@ body {
 	border: 1px solid green;
 	/* width: 100%; */
 	display: flex;
-	flex-direction: row;
-	flex-wrap: wrap;
+	flex-direction: column;
+	/* flex-wrap: wrap; */
 	overflow-x: scroll;
 }
 
 .season {
 	border: 1px solid black;
-	width: 49%;
+	display: flex;
+	min-width: 25em;
+	flex-direction: column;
+}
+
+.resultsDiv {
 	display: flex;
 	flex-direction: row;
 }
@@ -36,16 +41,19 @@ body {
 #driverResultDiv {
 	width: 50%;
 	border: 1px solid black;
+	background-color:beige;
 }
 
 #teamResultDiv {
 	width: 50%;
 	border: 1px solid black;
+	background-color:blanchedalmond;
 }
 
 .seasonHeader {
 	width: 100%;
 	border: 1px solid black;
+	background-color: bisque;
 }
 
 /**/

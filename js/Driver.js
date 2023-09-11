@@ -4,10 +4,11 @@ function Driver(name) {
 	const thisDriver = {
 		name: name,
 		team: {},
-		teamOwned: [],
-		age: getRandomNumber(16, 16),
+		teamsOwned: [],
+		age: getRandomNumber(16, 32),
 		funds: 0,
 		cost: getRandomNumber(1, 10),
+		retirement: getRandomNumber(10, 25),
 		contractLength: Number,
 		skills: {
 			corneringAbility: getRandomNumber(1, 10),
