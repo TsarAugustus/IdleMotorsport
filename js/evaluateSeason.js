@@ -38,7 +38,6 @@ function evaluateSeason(season) {
 		}
 	});
 	
-	console.log(season);
 	return season;
 }
 
@@ -49,11 +48,14 @@ function determineSeasonTiers(season) {
 		let tierCheck = tiers.filter(tier => tier.rank === circuit.rank);
 		if(tierCheck.length > 0) return;
 
+		let tierResults = determineSeasonTiersDriversAndTeams(season);
+
 		let thisTier = {
 			season: season,
 			rank: circuit.rank,
-			drivers: determineSeasonTiersDriversAndTeams(season).drivers,
-			teams: determineSeasonTiersDriversAndTeams(season).teams
+			drivers: tierResults.drivers,
+			teams: tierResults.teams,
+			circuitResults: []
 		};
 		
 		tiers.push(thisTier);
@@ -102,6 +104,8 @@ function determineSeasonTiersDriversAndTeams(season) {
 function determineSeasonTiersDriversAndTeamsPoints(season, tiers) {
 	tiers.forEach(tier => {
 		tier.season.circuitResult.forEach(thisCircuit => {
+			tier.circuitResults.push(thisCircuit);
+
 			thisCircuit.circuitResult.forEach(driverCircuitResult => {
 				// console.log(driverCircuitResult.driver.name);
 				let tierDriver = tier.drivers.filter(thisDriver => thisDriver.name === driverCircuitResult.driver.name); 

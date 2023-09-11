@@ -12,8 +12,8 @@ let settings = {
 	staffPerDepartmentLimit: 5,
 
 	//setInterval related settings
-	daysPerMonth: 10,
-	monthsPerYear: 2,
+	daysPerMonth: 30,
+	monthsPerYear: 12,
 	points: {
 		1: 25,
 		2: 18,

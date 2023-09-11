@@ -11,14 +11,15 @@ function updateSeasons(season) {
 	seasonHeader.innerHTML = season.name;
 	seasonHeader.classList.add('seasonHeader');
 	thisSeasonDiv.appendChild(seasonHeader);
-
+	console.log(season);
 	season.tierResults.forEach(tier => {
 		let thisTierDiv = document.createElement('div');
 		thisTierDiv.id = tier.rank;
-			
+		
 		let tierHeader = document.createElement('span');
-		// tierHeader.innerHTML = tier.rank;
-		thisTierDiv.appendChild(tierHeader);
+		tierHeader.innerHTML = tier.rank;
+		thisSeasonDiv.appendChild(tierHeader);
+		// thisSeasonDiv.appendChild(thisTierDiv);
 
 		let driverResultDiv = document.createElement('div');
 		driverResultDiv.id = 'driverResultDiv';
@@ -53,15 +54,57 @@ function updateSeasons(season) {
 			teamResultDiv.appendChild(thisTeamDiv);
 		});
 
+		let circuitResult = document.createElement('div');
+		circuitResult.classList.add('circuitResult');
+
+		let driverCircuitResult = document.createElement('div');
+		driverCircuitResult.classList.add('driverCircuitResult');
+		
+		tier.drivers.forEach(driver => {
+			let driverResultDiv = document.createElement('div');
+			driverResultDiv.classList.add('driverResultDiv');
+
+			let driverNameSpan = document.createElement('span');
+			driverNameSpan.classList.add('driverResultDivName');
+			driverNameSpan.innerHTML = driver.name;
+			driverResultDiv.appendChild(driverNameSpan);
+			
+			let circuitResults = document.createElement('div');
+			circuitResults.classList.add('circuitResults');
+
+			tier.circuitResults.forEach(circuit => {
+				circuit.circuitResult.forEach((driverCircuitResult, index) => {
+					if(driverCircuitResult.driver.name === driver.name) {
+						let x = document.createElement('span');
+						x.classList.add('driverCircuitResultDiv');
+						x.innerHTML = index + 1;
+						if(index + 1 === 1) x.classList.add('first');
+						if(index + 1 === 2) x.classList.add('second');
+						if(index + 1 === 3) x.classList.add('third');
+						if(driverCircuitResult.points > 0) x.classList.add('points');
+						circuitResults.appendChild(x);
+					}
+				});
+			});
+			
+			driverResultDiv.appendChild(circuitResults);
+
+			driverCircuitResult.appendChild(driverResultDiv);
+		});
+
+		
 		let resultsDiv = document.createElement('div');
 		resultsDiv.classList.add('resultsDiv');
-
+		
 		resultsDiv.appendChild(driverResultDiv);
 		resultsDiv.appendChild(teamResultDiv);
 
+		circuitResult.appendChild(driverCircuitResult);
+		
 		thisSeasonDiv.appendChild(resultsDiv);
+		thisSeasonDiv.appendChild(circuitResult);
 
-		thisSeasonDiv.appendChild(thisTierDiv);
+
 	});
 
 	document.getElementById('info').appendChild(thisSeasonDiv);
