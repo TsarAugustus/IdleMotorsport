@@ -15,6 +15,9 @@ import { simulateCircuit } from './simulateCircuit.js';
 import { evaluateSeason } from './evaluateSeason.js';
 
 import { updateSeasons } from './updateSeasons.js';
+import { getRandomNumber } from './getRandomNumber.js';
+
+import { evaluateDrivers } from './evaluateDrivers.js';
 
 const tabsFunctions = [{
 	name: 'Technology',
@@ -119,7 +122,6 @@ function startInterval() {
 		if(!pause) {
 			circuits.forEach(circuit => {
 				if(month === circuit.month && day === circuit.day) {
-					// console.log(currentSeason.circuitResult, currentSeason);
 					if(!currentSeason.circuitResult) currentSeason.circuitResult = [];
 					currentSeason.circuitResult.push(simulateCircuit(circuit, currentSeason));
 				}
@@ -133,16 +135,18 @@ function startInterval() {
 
 function calculateDate() {
 	if(month >= settings.monthsPerYear && day >= settings.daysPerMonth) {
-		// pause = true;
+		currentSeason = evaluateSeason(currentSeason);
+		updateSeasons(currentSeason);
+		seasons.push(currentSeason);
 		month = 0;
 		year++;
-		(currentSeason);
-		currentSeason = evaluateSeason(currentSeason);
-		seasons.push(currentSeason);
-		updateSeasons(currentSeason);
+
 	}
 	
 	if(day === 1 && month === 1 && year > 0) {
+		currentSeason = evaluateTeams(currentSeason);
+		currentSeason = evaluateDrivers(currentSeason);
+
 		currentSeason = generateSeason(seasons[year - 1], year, retiredTeams);
 	}
 
@@ -154,6 +158,50 @@ function calculateDate() {
 	if(!pause) {
 		day++;
 	}
+
+	if(year === 100) pause = true;
+}
+
+function evaluateTeams(season) {
+	season.staff.forEach(staff => {
+		if(staff.teamEmployed.name && staff.contractLength > 0 && staff.teamsOwned.length === 0) {
+			staff.contractLength--;
+			staff.cost++;
+		}
+		if(staff.contractLength === 0) {
+			staff = attemptStaffRehire(staff, staff.team);
+		}
+	});
+
+	season.drivers.forEach(driver => {
+		if(driver.team.name && driver.contractLength > 0) {
+		// 	driver.contractLength--;
+		// 	driver.cost++;
+		}
+		if(driver.contractLength === 0) {	
+			driver = attemptStaffRehire(driver, driver.team);	
+			season.teams.forEach(team => {
+				team.drivers.forEach(thisDriver => {
+					if(thisDriver.name === driver.name) {
+						team.drivers = team.drivers.filter(teamDriver => teamDriver.name !== driver.name);
+					}
+				});
+			});
+
+			// driver.team = {};
+		}
+	});
+
+	return season;
+}
+
+function attemptStaffRehire(staff, team) {
+	if(team.owner && team.owner.funds > staff.cost) {
+		staff.contractLength = getRandomNumber(1, 5);
+	}
+	else staff.team = {};
+
+	return staff;
 }
 
 initialization();

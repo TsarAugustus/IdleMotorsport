@@ -1,3 +1,5 @@
+import { getRandomNumber } from './getRandomNumber.js';
+
 function Vehicle(name, team, drivers) {
 	const thisVehicle = {
 		name: name,
@@ -21,6 +23,12 @@ function Vehicle(name, team, drivers) {
 			tires: '',
 			power: 0,
 			weight: 0
+		},
+		info: {
+			lowSpeed: getRandomNumber(1, 100),
+			mediumSpeed: getRandomNumber(1, 100),
+			highSpeed: getRandomNumber(1, 100),
+			straightLineSpeed: getRandomNumber(1, 100)
 		}
 	};
 

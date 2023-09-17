@@ -8,14 +8,19 @@ function simulateCircuit(circuit, season) {
 		circuit: circuit,
 		season: season,
 		rank: Number,
+		weather: '',
 		circuitResult: []
 	};
+
+	let weatherOptions = ['wet', 'dry'];
+	result.weather = weatherOptions[Math.floor(Math.random() * weatherOptions.length)];
 
 	circuit.grade.forEach(grade => {
 		season.teams.forEach(team => {
 			if(team.rank === grade) {
 				result.rank = grade;
-				eligibleTeams.push(team);
+				let teamCheck = eligibleTeams.filter(thisTeam => thisTeam.name === team.name);
+				if(teamCheck.length === 0) eligibleTeams.push(team);
 			}
 		});
 	});
@@ -28,12 +33,21 @@ function simulateCircuit(circuit, season) {
 				points: 0,
 				driverResult: 0
 			};
-
-			circuit.path.forEach(path => {
-				if(path.type === 'Corner') {
-					thisResult.driverResult += path.skill * driver.skills.corneringAbility / getRandomNumber(1, 10);
-				}
-			});
+			//TEMP TEST
+			for(let i=0; i<100; i++) {
+				circuit.path.forEach(path => {
+					let weatherMultiplier = 1;
+					if(result.weather === 'wet') {
+						weatherMultiplier = driver.skills.wetWeather;
+					}
+					if(path.type === 'Corner') {
+						thisResult.driverResult += path.skill * driver.skills.corneringAbility / getRandomNumber(1, 10) * weatherMultiplier * driver.skills.faultRecovery;
+					} 
+					if(path.type === 'Straight') {
+						thisResult.driverResult += path.skill * team.currentVehicle.info.straightLineSpeed * weatherMultiplier * driver.skills.faultRecovery;
+					}
+				});
+			}
 
 			result.circuitResult.push(thisResult);
 		});

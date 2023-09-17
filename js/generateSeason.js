@@ -57,13 +57,15 @@ function generateSeasonTeams(teams, staff, drivers, season, retiredTeams) {
 	teams = teamsToRetire.teams;
 	season = teamsToRetire.season;
 	retiredTeams = teamsToRetire.retiredTeams;
-
+	// console.log(settings.teamsPerSeason - season.teams.length, retiredTeams);
 	for(let i=0; i<settings.teamsPerSeason - season.teams.length; i++) {
 		let team = retiredTeams[Math.floor(Math.random() * retiredTeams.length)];
 		let restartedTeam;
 		if(retiredTeams.length > 0) restartedTeam = restartRetiredTeam(team, season.staff, season.drivers, season);
-		console.log(`Team ${team.name} Restarted`);
-		if(restartedTeam !== undefined) {
+		if(restartedTeam) retiredTeams = retiredTeams.filter(thisTeam => thisTeam.name !== restartedTeam.name);
+		team = buyStaffForTeam(team, staff, drivers, season);
+		if(restartedTeam !== undefined && restartedTeam.drivers.length > 0) {
+			console.log(`Team ${team.name} Restarted`);
 			season.teams.push(restartedTeam);
 			retiredTeams = retiredTeams.filter(thisTeam => thisTeam.name !== restartedTeam.name);
 		}

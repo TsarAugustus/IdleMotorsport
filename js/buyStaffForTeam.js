@@ -5,7 +5,6 @@ function buyStaffForTeam(team, staff, drivers, season) {
 	const potentialStaff = [];
 	let ownerFunds = team.owner.funds;
 	if(team.drivers.length < settings.driversPerTeam) {
-		// console.log(team.name, team.drivers.length, settings.driversPerTeam, team.drivers);
 		const potentialDrivers = [];
 
 		drivers = drivers.sort(function(a, b) {
@@ -13,7 +12,6 @@ function buyStaffForTeam(team, staff, drivers, season) {
 		});
 
 		drivers.forEach(driver => {
-			// console.log(driver.cost <= ownerFunds, potentialDrivers.length < settings.driversPerTeam, !driver.team.name);
 			if(driver.cost <= ownerFunds && potentialDrivers.length < settings.driversPerTeam && !driver.team.name) {
 				potentialDrivers.push(driver);
 				ownerFunds -= driver.cost;
@@ -21,15 +19,16 @@ function buyStaffForTeam(team, staff, drivers, season) {
 		});
         
 		for(let driver of potentialDrivers) {
-			const contractCost = driver.cost;
-
-			team.owner = team;
-			driver.team = team;
-			team.drivers.push(driver);
-			// console.log(team.drivers, potentialDrivers.length);
-			team.owner.funds -= contractCost;
-			driver.funds += contractCost;
-			driver.contractLength = getRandomNumber(1, 5);
+			if(team.drivers.length < settings.driversPerTeam) {
+				const contractCost = driver.cost;
+	
+				team.owner = team;
+				driver.team = team;
+				team.drivers.push(driver);
+				team.owner.funds -= contractCost;
+				driver.funds += contractCost;
+				driver.contractLength = getRandomNumber(1, 10);
+			}
 		}
 	}
 	
@@ -58,7 +57,7 @@ function buyStaffForTeam(team, staff, drivers, season) {
 
 				team.owner.funds -= contractPrice;
 				potentialMember.funds += contractPrice;
-				potentialMember.contractLength = getRandomNumber(1, 5);
+				potentialMember.contractLength = getRandomNumber(1, 10);
 				potentialMember.team = team;
 				team.departments[index].staff.push(potentialMember);
 				//Works, but should be better
@@ -66,7 +65,7 @@ function buyStaffForTeam(team, staff, drivers, season) {
 			}
 		});
 	});
-	// console.log(team.drivers);
+	
 	return team;
 }
 

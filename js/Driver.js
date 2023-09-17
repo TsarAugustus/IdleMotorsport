@@ -11,9 +11,9 @@ function Driver(name) {
 		retirement: getRandomNumber(10, 25),
 		contractLength: Number,
 		skills: {
-			corneringAbility: getRandomNumber(1, 10),
-			faultRecovery: 0,
-			wetWeather: 0
+			corneringAbility: getRandomNumber(1, 100),
+			faultRecovery: getRandomNumber(1, 10),
+			wetWeather: getRandomNumber(1, 100)
 		},
 		statistics: {
 			wins: [],

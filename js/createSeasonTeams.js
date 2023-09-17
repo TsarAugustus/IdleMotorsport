@@ -1,7 +1,5 @@
-import { settings } from './settings.js';
 import { Team } from './Team.js';
 import { buyStaffForTeam } from './buyStaffForTeam.js';
-import { getRandomNumber } from './getRandomNumber.js';
 
 let teamNames = [
 	'Abarth',
@@ -200,10 +198,7 @@ function createSeasonTeams(driverArray, teamsToGenerate, staff, drivers, season)
 		//Temporary
 		let name = teamNames[Math.floor(Math.random() * teamNames.length)] ? teamNames[Math.floor(Math.random() * teamNames.length)] : `Team ${i}-${season.name}`;
 		let team = new Team(name);
-		// console.log(team);
 		teamNames = teamNames.filter(item => item !== name);
-
-		let potentialOwner = { funds: 0 };
 
 		teamOwnerPool = staff.filter(member => { 
 			let memberToReturn = {};
@@ -211,37 +206,17 @@ function createSeasonTeams(driverArray, teamsToGenerate, staff, drivers, season)
 			return memberToReturn;
 		});
 
-		if(teamOwnerPool.length > 0) potentialOwner = teamOwnerPool[Math.floor(Math.random() * teamOwnerPool.length)];
-		const potentialDrivers = [];
-		let ownerFunds = potentialOwner.funds;
-
-		driverArray.forEach(driver => {
-			if(driver.cost <= ownerFunds && potentialDrivers.length < settings.driversPerTeam && !driver.team.name) {
-				potentialDrivers.push(driver);
-				ownerFunds -= driver.cost;
-			}
-		});
-        
-		for(const driver of potentialDrivers) {
-			const contractCost = driver.cost;
-
-			team.owner = potentialOwner;
-			driver.team = team;
-			team.drivers.push(driver);
-			potentialOwner.funds -= contractCost;
-			driver.funds += contractCost;
-			driver.contractLength = getRandomNumber(1, 10);
+		if(teamOwnerPool.length > 0) {
+			teamOwnerPool.sort(function(a, b) {
+				return b.funds - a.funds;
+			});
+			teamOwnerPool[0].teamsOwned.push(team);
+			team.owner = teamOwnerPool[0];
+			teamOwnerPool = teamOwnerPool.filter(owner => owner.name !== team.owner.name);
 		}
-
-		if(team.drivers.length > 0) potentialTeams.push(team);
-
-		staff.forEach((thisStaff, index) => {
-			if(team.owner.name === thisStaff.name) {
-				staff[index].teamsOwned.push(team);
-			}
-		});
 	
 		team = buyStaffForTeam(team, staff, drivers, season);
+		if(team.drivers.length > 0) potentialTeams.push(team);
 	}
 
 	return potentialTeams;

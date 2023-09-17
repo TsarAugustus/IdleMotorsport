@@ -8,35 +8,6 @@ function evaluateSeason(season) {
 		let tierTeamChampion = season.teams.filter(team => team.name === tier.teams[0].name);
 		tierTeamChampion[0].statistics.titles.push(season);
 	});
-
-	//Update this
-	season.staff.forEach(staff => {
-		if(staff.teamEmployed.name && staff.contractLength > 0 && staff.teamsOwned.length === 0) {
-			staff.contractLength--;
-			staff.cost++;
-		}
-		if(staff.contractLength === 0) {
-			staff.team = {};
-		}
-	});
-
-	season.drivers.forEach(driver => {
-		if(driver.team.name && driver.contractLength > 0) {
-			driver.contractLength--;
-			driver.cost++;
-		}
-		if(driver.contractLength === 0) {		
-			season.teams.forEach(team => {
-				team.drivers.forEach(thisDriver => {
-					if(thisDriver.name === driver.name) {
-						team.drivers = team.drivers.filter(teamDriver => teamDriver.name !== driver.name);
-					}
-				});
-			});
-
-			driver.team = {};
-		}
-	});
 	
 	return season;
 }
@@ -107,7 +78,6 @@ function determineSeasonTiersDriversAndTeamsPoints(season, tiers) {
 			tier.circuitResults.push(thisCircuit);
 
 			thisCircuit.circuitResult.forEach(driverCircuitResult => {
-				// console.log(driverCircuitResult.driver.name);
 				let tierDriver = tier.drivers.filter(thisDriver => thisDriver.name === driverCircuitResult.driver.name); 
 				let tierTeam = tier.teams.filter(thisTeam => thisTeam.name === driverCircuitResult.driver.team.name);
 				tierDriver[0].points += driverCircuitResult.points;

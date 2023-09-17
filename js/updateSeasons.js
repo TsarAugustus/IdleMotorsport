@@ -11,13 +11,16 @@ function updateSeasons(season) {
 	seasonHeader.innerHTML = season.name;
 	seasonHeader.classList.add('seasonHeader');
 	thisSeasonDiv.appendChild(seasonHeader);
-	console.log(season);
+	
 	season.tierResults.forEach(tier => {
 		let thisTierDiv = document.createElement('div');
 		thisTierDiv.id = tier.rank;
 		
 		let tierHeader = document.createElement('span');
-		tierHeader.innerHTML = tier.rank;
+
+		let x = tier.drivers[0].points - tier.drivers[1].points;
+
+		tierHeader.innerHTML = `${tier.rank} - ${tier.drivers.length} - ${tier.teams.length} - (${x})`;
 		thisSeasonDiv.appendChild(tierHeader);
 		// thisSeasonDiv.appendChild(thisTierDiv);
 
@@ -46,8 +49,7 @@ function updateSeasons(season) {
 			let teamInfo = document.createElement('span');
 				
 			const teamTitles = team.teamInfo.statistics.titles.length;
-
-			teamInfo.innerHTML = `${team.name}(${teamTitles})(T) - ${team.points}`;
+			teamInfo.innerHTML = `${team.name}(${teamTitles})(T) - ${team.points}(TOTAL: ${team.teamInfo.drivers.length})`;
 
 			thisTeamDiv.appendChild(teamInfo);
 
@@ -82,6 +84,8 @@ function updateSeasons(season) {
 						if(index + 1 === 2) x.classList.add('second');
 						if(index + 1 === 3) x.classList.add('third');
 						if(driverCircuitResult.points > 0) x.classList.add('points');
+						if(circuit.weather === 'wet') x.classList.add('wetCircuit');
+						if(circuit.weather === 'dry') x.classList.add('dryCircuit');
 						circuitResults.appendChild(x);
 					}
 				});

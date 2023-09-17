@@ -6,9 +6,9 @@ function Circuit(name, day, month, grade) {
 		day: day,
 		month: month,
 		grade: grade,
-		path: createCircuitPath(5, 5)
+		path: createCircuitPath(getRandomNumber(1, 20), getRandomNumber(1, 20))
 	};
-
+	// console.log(thisCircuit);
 	return thisCircuit;
 }
 
@@ -20,7 +20,7 @@ function createCircuitPath(corners, straights) {
 		const pathToAdd = {
 			type: ''
 		};
-		pathToAdd.skill = (1, 10);
+		pathToAdd.skill = getRandomNumber(1, 100);
         
 		if(choice === 0 && corners > 0) { 
 			//Corner
@@ -44,7 +44,9 @@ function createCircuitPath(corners, straights) {
 
 function createCorner(pathToAdd) {
 	pathToAdd.type = 'Corner';
+	let cornerTypes = ['lowSpeed', 'mediumSpeed', 'highSpeed'];
 
+	pathToAdd.cornerType = cornerTypes[Math.floor(Math.random() * cornerTypes.length)];
 	return pathToAdd;
 }
 
