@@ -1,0 +1,271 @@
+.circuitResult {
+	display: flex;
+	flex-direction: row;
+	width: 100%;
+	border: 1px solid black;
+	background-color: aqua;
+	justify-content: flex-start;
+}
+
+.circuitDriverResults {
+	display: flex;
+	flex-direction: column;
+}
+
+.driverResultDiv {
+	display: flex;
+	flex-direction: row;;
+}
+
+.driverResultDivName {
+	width: 50%;
+}
+
+.circuitResults {
+	width: 50%;
+	display: flex;
+	justify-content: flex-start;
+}
+
+.driverCircuitResult {
+	width: 100%;
+}
+
+.driverCircuitResultDiv {
+	min-width: 1em;
+	text-align: center;
+	border: 1px solid black;
+
+	/* padding-left: 1em;
+	padding-right: 1em; */
+}
+
+.first {
+	background-color: gold !important;
+}
+
+.second {
+	background-color: silver !important;
+}
+
+.third {
+	background-color: darkgoldenrod !important;
+}
+
+.points {
+	background-color: green;
+}
+
+.wetCircuit {
+	color: blue;
+	font-weight: bold;
+}
+
+body {
+    margin: 0px;
+}
+
+#top {
+	height: 50%;
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+}
+
+#bottom {
+	height: 50%;
+	width: 100%;
+}
+
+/**/
+
+#info {
+	height: 100%;
+	border: 1px solid green;
+	/* width: 100%; */
+	display: flex;
+	flex-direction: column;
+	/* flex-wrap: wrap; */
+	overflow-x: scroll;
+}
+
+.season {
+	border: 1px solid black;
+	display: flex;
+	min-width: 25em;
+	flex-direction: column;
+}
+
+.resultsDiv {
+	display: flex;
+	flex-direction: row;
+}
+
+#driverResultDiv {
+	width: 50%;
+	border: 1px solid black;
+	background-color:beige;
+}
+
+#teamResultDiv {
+	width: 50%;
+	border: 1px solid black;
+	background-color:blanchedalmond;
+}
+
+.seasonHeader {
+	width: 100%;
+	border: 1px solid black;
+	background-color: bisque;
+}
+
+/**/
+
+#map {
+    display: flex;
+    width: 50%;
+    height: 100%;
+    border: 1px solid black;
+}
+
+#area {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid blue;
+    width: 100%;
+}
+
+#ribbon {
+    display: flex;
+    width: 100%;
+    height: 5%;
+    border: 1px solid green;
+}
+
+#date { 
+    width: 90%;
+}
+
+#pause {
+    text-align: right;
+    margin-right: 10%;
+}
+
+/* Game Screen */
+
+#area { 
+    display: flex;
+    justify-content: center !important;
+
+    width: 95%;
+    height: 95%;
+    border: 1px solid cyan;
+}
+
+#game {
+    border: 1px solid red;
+    height: 95%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+#tabbedContainer {
+    width: 50%;
+    height: 100%;
+    border: 1px solid black;
+
+    overflow-y: scroll;
+}
+
+#circuitList {
+    /* border: 1px solid black;
+    width: 20%; */
+}
+
+/* =========== */
+
+/* Technology Screen */
+
+#Technology {
+    border: 1px solid black;
+    width: 100%;
+    height: 50vh;
+}
+
+#technologyResearch {
+    display: flex;
+    justify-content: space-evenly;
+    
+}
+
+#departmentDiv {
+    border: 1px solid black;
+    display: flex;
+    justify-content: center;
+}
+
+.departmentHead {
+    border: 1px solid black;
+    margin: 1em;
+}
+
+#focusContainer {
+    display: flex;
+    flex-direction: row;
+    margin-top: 5%;
+    border: 1px solid black;
+}
+
+#focusContainer div {
+    display: flex;
+    flex-direction: column;
+    margin: 1em;
+    padding: 1em;
+    border: 1px solid black;
+}
+
+#focusContainer div:nth-child(1) {
+    border: 1px solid red;
+}
+
+#focusContainer div:nth-child(2) {
+    border: 1px solid green;
+}
+
+#focusContainer div:nth-child(3) {
+    border: 1px solid cyan;
+}
+
+#focusContainer div:nth-child(4) {
+    border: 1px solid orange;
+}
+
+#focusContainer div:nth-child(5) {
+    border: 1px solid purple    ;
+}
+
+.focus {
+    display: flex;
+    text-align: center;
+    width: 10em;
+}
+
+.focusTitle {
+    margin-bottom: 1em;
+}
+
+.tech {
+    color: red;
+    border: 1px solid black;
+    margin-top: 0.2em;
+    margin-bottom: 0.2em;
+    width: 100%;
+}
+
+.unlocked {
+    color: green;
+}
+
+
+/* ================= */
