@@ -7,9 +7,11 @@ export function Vehicle() {
 	const engineManufacturer = createManufacturer('Team');
 	const tireManufacturer = createManufacturer('Tire');
 
-	return {
+	let thisVehicle = {
 		Engine: Engine(engineManufacturer),
 		Tire: Tire(tireManufacturer),
 		Sponsor: sponsors[Math.floor(Math.random() * sponsors.length)]
 	};
+
+	return thisVehicle;
 }

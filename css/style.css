@@ -3,7 +3,7 @@
 	flex-direction: row; */
 }
 
-.vehicleDiv {
+.VehicleDiv {
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
