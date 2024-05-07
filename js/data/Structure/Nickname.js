@@ -86,10 +86,73 @@ export const Nickname = [
 	}, {
 		Title: 'The Intimidator',
 		Requirements: {
-			Prestige: 80,
-			Charisma: 80,
-			Overtaking: 80
+			Attributes: {
+				Prestige: 80,
+				Charisma: 80,
+				Overtaking: 80
+			},
+			Statistics: {
+				Championships: 1
+			}
 		},
 		Unique: true
+	}, {
+		Title: 'The Battler',
+		Requirements: {
+			Overtaking: 100,
+			Defending: 100,
+			Racecraft: 100
+		}
+	}, {
+		Title: 'The Conquerer',
+		Requirements: {
+			Statistics: {
+				Championships: 10,
+				Wins: 100
+			}
+		}
+	}, {
+		Title: 'The Damned',
+		Requirements: {
+			Statistics: {
+				Races: 100,
+				Championships: 0,
+				Wins: 0,
+				Podiums: 0
+			}
+		}
+	}, {
+		Title: 'The Elder',
+		Requirements: {
+			Age: 50,
+			Statistics: {
+				Championships: 1
+			}
+		}
+	}, {
+		Title: 'The Fortunate',
+		Requirements: {
+			Statistics: {
+				Races: 1,
+				Wins: 1
+			}
+		}
+	}, {
+		Title: 'The Magnificent',
+		Requirements: {
+			Attributes: {
+				Prestige: 10000
+			}
+		}
+	}, {
+		Title: 'The Captain',
+		Requirements: {
+			Attributes: {
+				Prestige: 10000
+			}, 
+			Statistics: {
+				Wins: 100
+			}
+		}
 	}
 ];

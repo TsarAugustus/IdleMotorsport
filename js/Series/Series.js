@@ -7,9 +7,12 @@ export function Series(Tracks, People) {
 	let thisSeries = {
 		Owner: Object,
 		Tracks: [],
-		style: seriesRules.style,
-		rules: seriesRules,
+		Style: seriesRules.style,
+		Rules: seriesRules,
 		Cost: Number,
+		CostPerYear: {
+			Total: 10000
+		},
 		Prestige: 0,
 		Type: 'Series'
 	};
@@ -19,8 +22,7 @@ export function Series(Tracks, People) {
 	let trackCost = 0;
 	
 	thisSeries.Tracks.forEach(track => {
-
-		thisSeries.Prestige += track.track.Prestige;
+		thisSeries.Prestige += track.track.Prestige / thisSeries.Rules.trackGrade;
 		trackCost += track.track.Cost;
 	});
 
@@ -32,9 +34,7 @@ export function Series(Tracks, People) {
 	];
 
 	thisSeries.Owner = NewOwner(seriesPreferredAttributes, People, thisSeries);
-
-	
-
+	if(thisSeries.Tracks.length === 0) thisSeries.Owner = undefined; 
 	return thisSeries;
 }
 
@@ -44,7 +44,7 @@ function determineSeriesTracks(Tracks, seriesRules, thisSeries) {
 	Tracks.forEach(track => {
 		track.configurations.forEach(configuration => {
 			const configurationGradeEvaluation = configuration.grade === seriesRules.trackGrade;
-			const configurationStyleEvaluation = thisSeries.style === configuration.style;
+			const configurationStyleEvaluation = thisSeries.Style === configuration.style;
 			const seriesTrackListLimitEvaluation = thisSeries.Tracks.length < totalSeriesTracks;
 
 			const seriesChampionshipTracks = thisSeries.Tracks.filter(track => track.championship === true).length;
@@ -107,9 +107,9 @@ function createSeriesRules() {
 	rules.ovals = false;
 	rules.teamLimit = 10;
 	rules.vehiclesPerTeam = 2;
-	rules.trackGrade = 1;
-	rules.championshipTracks = randomNumber(1, 30);
-	rules.nonChampionshipTracks = 0;
+	rules.trackGrade = randomNumber(1, 5);
+	rules.championshipTracks = randomNumber(randomNumber(1, 5), (randomNumber(5, 30)));
+	rules.nonChampionshipTracks = randomNumber(0, 6);
 
 	return rules;
 }

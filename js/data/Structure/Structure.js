@@ -1,3 +1,5 @@
+import { Feelings, CombinationFeelings } from './Feelings.js';
+
 function Person() {
 	return {
 		Name: {
@@ -6,12 +8,14 @@ function Person() {
 			Nickname: String,
 			Locale: String
 		},
+		Age: Number,
 		Sex: String,
 		Role: [],
 		Attributes: {
 			//Common Attributes
 			Prestige: Number,
 			Charisma: Number,
+			Morale: Number,
 
 			//Driver Attributes
 			Accuracy: Number,
@@ -26,7 +30,6 @@ function Person() {
 			Focus: Number,
 			Improvability: Number,
 			Marketability: Number,
-			Morale: Number,
 			Overtaking: Number,
 			Pace: Number,
 			Racecraft: Number,
@@ -38,9 +41,20 @@ function Person() {
 		Statistics: {
 			Wins: Array,
 			Podiums: Array,
-			Championships: Array
+			Championships: Array,
+			Races: Array
 		},
-		Money: Number
+		Money: Number,
+		MentalHealth: {
+			CurrentFeelings: {
+				Feelings: undefined,
+				CombinationFeelings: undefined
+			},
+			Feelings,
+			CombinationFeelings
+		},
+		Traits: [],
+		Goals: []
 	};
 	
 }

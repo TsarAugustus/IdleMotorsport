@@ -5,11 +5,14 @@ export function Track(iteration, People) {
 	let seriesStyle = trackTypes[Math.floor(Math.random() * trackTypes.length)].style;
 
 	let thisTrack = {
-		Owner: Object,
+		Owner: undefined,
 		name: `Track ${iteration}`,
 		configurationNumber: getNumberInRange(1, 10),
 		configurations: [],
 		Cost: Number,
+		CostPerYear: {
+			Total: 10000
+		},
 		Prestige: Number,
 		Type: 'Track'
 	};
@@ -26,9 +29,8 @@ export function Track(iteration, People) {
 		'Prestige'
 	];
 
-	thisTrack.Owner = NewOwner(preferredOwnerAttributes, People, thisTrack);
 
-	// console.log(thisTrack);
+	thisTrack.Owner = NewOwner(preferredOwnerAttributes, People, thisTrack);
 	
 	return thisTrack;
 }

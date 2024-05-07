@@ -1,6 +1,8 @@
+/* eslint-disable no-unused-vars */
 import { Structure } from '../data/Structure/Structure.js';
 import { Name } from '../data/Structure/Name.js';
 import { Nickname } from '../data/Structure/Nickname.js';
+import { Feelings } from '../Feelings/Feelings.js';
 
 export function Person(randomAttributesBoolean, People) {
 	let NewPerson = {};
@@ -22,13 +24,17 @@ export function Person(randomAttributesBoolean, People) {
 	// NewPerson.Role.push(Structure.Role()[randomPersonRole]);
 	
 	if(randomAttributesBoolean === true) {
-		NewPerson.Money = randomNumber(0, 100000);
+		NewPerson.Money = randomNumber(0, 500000);
 		NewPerson.Attributes = randomAttributes(NewPerson.Attributes);
-		NewPerson.Statistics = randomStatistics(NewPerson.Statistics);
-		NewPerson.Name.Nickname = determineNickname(NewPerson, People);
+		// NewPerson.Statistics = randomStatistics(NewPerson.Statistics);
+		// NewPerson.Name.Nickname = determineNickname(NewPerson, People);
 	}
 
-	if(NewPerson.Name.Nickname !== String) console.log(`${NewPerson.Name.First} '${NewPerson.Name.Nickname}' ${NewPerson.Name.Last}`);
+	// if(NewPerson.Name.Nickname !== String) console.log(`${NewPerson.Name.First} '${NewPerson.Name.Nickname}' ${NewPerson.Name.Last}`);
+
+	NewPerson = Feelings(NewPerson);
+
+	NewPerson.Age = 17;
 
 	return NewPerson;
 }
