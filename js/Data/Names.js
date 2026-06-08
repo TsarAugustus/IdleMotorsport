@@ -1,4 +1,4 @@
-const firstNames = [
+const FirstNames = [
 	'A.J.',
 	'Adolf',
 	'Adolfo',
@@ -472,7 +472,7 @@ const firstNames = [
 	'Zsolt'
 ];
 
-const lastNames = [
+const LastNames = [
 	'Abate',
 	'Abecassis',
 	'Acheson',
@@ -1275,5 +1275,15 @@ const lastNames = [
 	'Zorzi',
 	'Zunino',
 ];
+
+const Team = {
+	prefix: ['Scuderia', 'Team', 'Super'],
+	suffix: ['Team', 'Racing', 'Motorsport', 'GP', 'Automobiles', 'Engineering', 'Motors', 'Grand Prix']
+};
+
+const Tire = {
+	prefix: [],
+	suffix: ['Tire', 'Tires', 'Tyre', 'Tyres', 'Rubber', 'Racing Tyres', 'Racing Tires']
+};
 	
-export { firstNames, lastNames };
+export { FirstNames, LastNames, Team, Tire };
