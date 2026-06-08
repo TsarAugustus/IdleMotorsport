@@ -15,8 +15,7 @@ export function attemptOrganizationFounding(person) {
 
         person.money -= organizationData.cost;
 
-        const moneyInvested = Math.min(person.money, organizationData.cost);
-        person.money -= moneyInvested;
+        const moneyInvested = organizationData.cost;
 
         const newOrganization = generateOrganization(
             person,

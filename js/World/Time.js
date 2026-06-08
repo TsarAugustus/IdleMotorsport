@@ -51,7 +51,7 @@ function tick() {
 					handleRetirement(person);
 				}
 
-				if(person.age > 60 && person.alive) {
+				if(person.age > 80 && person.alive) {
 					person.alive = false;
 					handleDeath(person);
 				}
