@@ -2,7 +2,26 @@ import { world } from "../World/World.js";
 
 import { addHistory } from "./HistorySystem.js";
 
-export function organizationHire(organization, person) {
+export function initiateHireFilter(organization) {
+	const organizationOwner = organization.owner;
+	const randomPerson = world.people[Math.floor(Math.random() * world.people.length)];
+
+	const hiringRules = [
+		() => randomPerson.alive,
+		() => !randomPerson.retired,
+		() => organizationOwner !== randomPerson,
+		() => randomPerson.ownedOrganizations.length === 0,
+		() => !organization.employees.some(employee => employee.id === randomPerson.id)
+	];
+
+	const canHire = hiringRules.every(rule => rule());
+	
+	if (canHire) {
+		organizationHire(organization, randomPerson);
+	}
+}
+
+function organizationHire(organization, person) {
 
 	if (organization.employees.some(employee => employee.id === person.id)) return;
 

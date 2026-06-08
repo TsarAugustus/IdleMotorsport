@@ -4,6 +4,7 @@ export default class Organization {
 	money;
 	owner;
 	prestige;
+	type;
 	employees = [];
 	technologies = [];
 	parentCompany;

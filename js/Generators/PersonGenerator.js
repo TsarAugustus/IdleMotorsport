@@ -11,7 +11,12 @@ export function generatePerson() {
 	thisPerson.age = Math.floor(Math.random() * 60) + 18;
 	thisPerson.money = Math.floor(Math.pow(Math.random(), 3) * 10000);
 	thisPerson.prestige = Math.floor(Math.random() * 100);
+	thisPerson.alive = true;
+	thisPerson.retired = false;
+
+	Object.keys(thisPerson.skills).forEach(skill => {
+		thisPerson.skills[skill] = Math.floor(Math.random() * 101);
+	});
 	
-	thisPerson.skills.aerodynamics = Math.floor(Math.random() * 100);
 	world.people.push(thisPerson);
 }

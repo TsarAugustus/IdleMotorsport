@@ -1,3 +1,5 @@
+import { skills } from "../Data/Skills.js"
+
 export default class Person {
 	id;
 	firstName;
@@ -7,7 +9,7 @@ export default class Person {
 	prestige;
 	employedOrganizations = [];
 	ownedOrganizations = [];
-	skills = {
-		aerodynamics: 0
-	}
+	alive;
+	retired;
+	skills = skills;
 }

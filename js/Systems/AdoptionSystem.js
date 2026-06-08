@@ -9,12 +9,19 @@ export function attemptTechnologyAdoption(organization, technology) {
 	if (!technology.discovered) return;
 	if (organization.technologies.includes(technology)) return;
 
-	console.log(`Attempting to adopt ${technology.name} for ${organization.name}`);
-	if(Math.random() * 100 < 50) {
+	const adoptionChance = Math.max(5, 100 - technology.difficulty);
+
+	if (Math.random() * 100 < adoptionChance) {
+
 		organization.technologies.push(technology);
 		technology.adopters.push(organization.id);
-		technology.provenness += 10;
-		addHistory(`${organization.name} adopted ${technology.name} in year ${world.year}.`);
-		console.log('Proved:', technology.provenness)
+
+		
+		const provennessGain = Math.max(0.1, (101 - technology.difficulty) / 100);
+		technology.provenness += provennessGain * Math.sqrt(organization.prestige);
+
+		technology.provenness = Math.min(100, technology.provenness);
+
+		addHistory(`${organization.name} adopted ${technology.name} in year ${world.year}. Its provenness is ${Math.round(technology.provenness)}/100`);
 	}
 }
