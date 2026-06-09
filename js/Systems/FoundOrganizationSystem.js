@@ -3,11 +3,13 @@ import { addHistory } from "./HistorySystem.js";
 
 import { skillGroups } from "../Data/SkillGroups.js";
 import { organizationTypes } from "../Data/OrganizationTypes.js";
+import { organizationIdentities } from "../Data/OrganizationIdentityDatabase.js";
 
 export function attemptOrganizationFounding(person) {
 
     const organizationType = defineOrganizationType(person);
     const organizationData = organizationTypes[organizationType];
+	const organizationIdentities = defineOrganizationIdentity(person, organizationType, organizationData);
 
     if (person.ownedOrganizations.length > 0) return;
 
@@ -20,12 +22,11 @@ export function attemptOrganizationFounding(person) {
         const newOrganization = generateOrganization(
             person,
             moneyInvested,
-            organizationType
+            organizationType,
+			organizationIdentities
         );
 
-        addHistory(
-            `${person.firstName} ${person.lastName} founded: ${newOrganization.name}`
-        );
+        addHistory(`${person.firstName} ${person.lastName} founded: ${newOrganization.name}`);
     }
 }
 
@@ -59,4 +60,10 @@ function defineOrganizationType(person) {
         .sort((a, b) => b[1] - a[1])[0];
 
     return bestFit[0];
+}
+
+// For now, returns a random identity, which will steer the organization towards that identity
+function defineOrganizationIdentity(person, organizationType, organizationData) {
+	const initialIdentity = organizationData.identities[Math.floor(Math.random() * organizationData.identities.length)];
+	return initialIdentity;
 }

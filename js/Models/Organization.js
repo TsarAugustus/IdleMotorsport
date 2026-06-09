@@ -9,4 +9,5 @@ export default class Organization {
 	technologies = [];
 	parentCompany;
 	subsidiaries = [];
+	identities = [];
 }

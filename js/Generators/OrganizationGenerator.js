@@ -4,14 +4,9 @@ import { LastNames, Team } from "../Data/Names.js";
 
 import Organization from '../Models/Organization.js';
 
-export function generateOrganization(person, moneyInvested, organizationType) {
+export function generateOrganization(person, moneyInvested, organizationType, organizationIdentity) {
 	const thisOrganization = new Organization();
 	thisOrganization.id = world.organizations.length + 1;
-
-	// Old random way
-	// thisOrganization.name = Team.prefix[Math.floor(Math.random() * Team.prefix.length)] + 
-	// ` ${LastNames[Math.floor(Math.random() * LastNames.length)]} `   
-	// + Team.suffix[Math.floor(Math.random() * Team.suffix.length)];
 
 	thisOrganization.name = Team.prefix[Math.floor(Math.random() * Team.prefix.length)] + 
 	` ${person.lastName} `   
@@ -23,6 +18,7 @@ export function generateOrganization(person, moneyInvested, organizationType) {
 	thisOrganization.owner = person;
 
 	thisOrganization.type = organizationType;
+	thisOrganization.identities.push(organizationIdentity);
 
 	person.ownedOrganizations.push(thisOrganization);
 	world.organizations.push(thisOrganization);
