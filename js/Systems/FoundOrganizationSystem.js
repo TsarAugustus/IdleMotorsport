@@ -5,65 +5,96 @@ import { skillGroups } from "../Data/SkillGroups.js";
 import { organizationTypes } from "../Data/OrganizationTypes.js";
 import { organizationIdentities } from "../Data/OrganizationIdentityDatabase.js";
 
+import { world } from "../World/World.js";
+
+export function organizationTick() {
+	// Random organization founding
+	if (Math.random() > 0.5) {
+		const randomPerson =
+			world.people[Math.floor(Math.random() * world.people.length)];
+
+		if (!randomPerson.retired && randomPerson.alive)
+			attemptOrganizationFounding(randomPerson);
+	}
+}
+
 export function attemptOrganizationFounding(person) {
+	const organizationType = defineOrganizationType(person);
+	const organizationData = organizationTypes[organizationType];
+	const organizationIdentities = defineOrganizationIdentity(
+		person,
+		organizationType,
+		organizationData,
+	);
 
-    const organizationType = defineOrganizationType(person);
-    const organizationData = organizationTypes[organizationType];
-	const organizationIdentities = defineOrganizationIdentity(person, organizationType, organizationData);
+	if (person.ownedOrganizations.length > 0) return;
 
-    if (person.ownedOrganizations.length > 0) return;
+	if (
+		person.money > organizationData.cost &&
+		person.prestige >= organizationData.prestigeCost
+	) {
+		person.money -= organizationData.cost;
 
-    if (person.money > organizationData.cost && person.prestige >= organizationData.prestigeCost) {
+		const moneyInvested = organizationData.cost;
 
-        person.money -= organizationData.cost;
+		const newOrganization = generateOrganization(
+			person,
+			moneyInvested,
+			organizationType,
+			organizationIdentities,
+		);
 
-        const moneyInvested = organizationData.cost;
-
-        const newOrganization = generateOrganization(
-            person,
-            moneyInvested,
-            organizationType,
-			organizationIdentities
-        );
-
-        addHistory(`${person.firstName} ${person.lastName} founded: ${newOrganization.name}`);
-    }
+		addHistory(
+			`${person.firstName} ${person.lastName} founded: ${newOrganization.name}`,
+		);
+	}
 }
 
 export function getGroupScores(person) {
-    const scores = {};
+	const scores = {};
 
-    for (const [skillGroupName, skills] of Object.entries(skillGroups)) {
-        scores[skillGroupName] = skills.reduce((total, skill) => {
-			return total + person.skills[skill];
-		}, 0) / skills.length;
-    }
+	for (const [skillGroupName, skills] of Object.entries(skillGroups)) {
+		scores[skillGroupName] =
+			skills.reduce((total, skill) => {
+				return total + person.skills[skill];
+			}, 0) / skills.length;
+	}
 
-    return scores;
+	return scores;
 }
 
 function defineOrganizationType(person) {
-    const groupScores = getGroupScores(person);
+	const groupScores = getGroupScores(person);
 
-    const organizationScores = {};
+	const organizationScores = {};
 
-	for (const [organizationType, groups] of Object.entries(organizationTypes)) {
-    organizationScores[organizationType] = groups.groups.reduce(
-        (total, group) => {
-            return total + (groupScores[group] || 0);
-        },
-        0
-    );
-}
+	for (const [organizationType, groups] of Object.entries(
+		organizationTypes,
+	)) {
+		organizationScores[organizationType] = groups.groups.reduce(
+			(total, group) => {
+				return total + (groupScores[group] || 0);
+			},
+			0,
+		);
+	}
 
-    const bestFit = Object.entries(organizationScores)
-        .sort((a, b) => b[1] - a[1])[0];
+	const bestFit = Object.entries(organizationScores).sort(
+		(a, b) => b[1] - a[1],
+	)[0];
 
-    return bestFit[0];
+	return bestFit[0];
 }
 
 // For now, returns a random identity, which will steer the organization towards that identity
-function defineOrganizationIdentity(person, organizationType, organizationData) {
-	const initialIdentity = organizationData.identities[Math.floor(Math.random() * organizationData.identities.length)];
+function defineOrganizationIdentity(
+	person,
+	organizationType,
+	organizationData,
+) {
+	const initialIdentity =
+		organizationData.identities[
+			Math.floor(Math.random() * organizationData.identities.length)
+		];
 	return initialIdentity;
 }
