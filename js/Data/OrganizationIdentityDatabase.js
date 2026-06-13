@@ -4,25 +4,23 @@
 // investment, research, expansion, and other decisions.
 
 export const organizationIdentities = {
+	technology: {
+		name: "Technology",
+	},
 
-    technology: {
-        name: 'Technology'
-    },
+	prestige: {
+		name: "Prestige",
+	},
 
-    prestige: {
-        name: 'Prestige'
-    },
+	wealth: {
+		name: "Wealth",
+	},
 
-    wealth: {
-        name: 'Wealth'
-    },
+	growth: {
+		name: "Growth",
+	},
 
-    growth: {
-        name: 'Growth'
-    },
-
-    talent: {
-        name: 'Talent'
-    }
-
+	talent: {
+		name: "Talent",
+	},
 };

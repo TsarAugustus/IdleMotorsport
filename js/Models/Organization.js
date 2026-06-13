@@ -10,4 +10,10 @@ export default class Organization {
 	parentCompany;
 	subsidiaries = [];
 	identities = [];
+	foundingYear;
+	active;
+
+	// TODO: Add Owner/Employee History
+	ownerHistory = [];
+	employeeHistory = [];
 }

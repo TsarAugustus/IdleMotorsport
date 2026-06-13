@@ -5,7 +5,7 @@ import { addHistory } from "./HistorySystem.js";
 export function organizationHireTick() {
 	// Pick random company, try to hire someone
 	const randomOrganzation = world.organizations[Math.floor(Math.random() * world.organizations.length)];
-	if (randomOrganzation) initiateHireFilter(randomOrganzation);
+	if (randomOrganzation && randomOrganzation.active) initiateHireFilter(randomOrganzation);
 }
 
 export function initiateHireFilter(organization) {

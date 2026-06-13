@@ -1,50 +1,50 @@
-export const organizationTypes = {
-    racingTeam: {
-        groups: ["engineering", "racing"],
-        cost: 1000,
+export const organizationCategories = {
+	racingTeam: {
+		groups: ["engineering", "racing"],
+		cost: 1000,
 		prestigeCost: 50,
-		identities: ["prestige", "talent"]
-    },
+		identities: ["prestige", "talent"],
+	},
 
-    manufacturer: {
-        groups: ["engineering"],
-        cost: 1000,
+	manufacturer: {
+		groups: ["engineering"],
+		cost: 1000,
 		prestigeCost: 50,
-		identities: ["technology", "wealth"]
-    },
+		identities: ["technology", "wealth"],
+	},
 
-    circuitOwner: {
-        groups: ["venue", "business"],
-        cost: 1000,
+	circuitOwner: {
+		groups: ["venue", "business"],
+		cost: 1000,
 		prestigeCost: 50,
-		identities: ["prestige", "wealth"]
-    },
+		identities: ["prestige", "wealth"],
+	},
 
-    driverAcademy: {
-        groups: ["talent"],
-        cost: 1000,
+	driverAcademy: {
+		groups: ["talent"],
+		cost: 1000,
 		prestigeCost: 50,
-		identities: ["growth", "talent"]
-    },
+		identities: ["growth", "talent"],
+	},
 
-    logisticsCompany: {
-        groups: ["operations"],
-        cost: 1000,
+	logisticsCompany: {
+		groups: ["operations"],
+		cost: 1000,
 		prestigeCost: 50,
-		identities: ["wealth"]
-    },
+		identities: ["wealth"],
+	},
 
-    mediaCompany: {
-        groups: ["business"],
-        cost: 1000,
+	mediaCompany: {
+		groups: ["business"],
+		cost: 1000,
 		prestigeCost: 50,
-		identities: ["prestige", "wealth"]
-    },
+		identities: ["prestige", "wealth"],
+	},
 
-    championshipOrganizer: {
-        groups: ["business", "operations"],
-        cost: 1000,
+	championshipOrganizer: {
+		groups: ["business", "operations"],
+		cost: 1000,
 		prestigeCost: 50,
-		identities: ["prestige", "growth"]
-    }
+		identities: ["prestige", "growth"],
+	},
 };
