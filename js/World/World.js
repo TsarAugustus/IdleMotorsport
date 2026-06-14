@@ -8,5 +8,6 @@ export const world = {
 
 	people: [],
 	organizations: [],
-	history: []
-}
+	history: [],
+	products: [],
+};

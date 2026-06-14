@@ -1276,14 +1276,51 @@ const LastNames = [
 	"Zunino",
 ];
 
-const Team = {
-	prefix: ["Scuderia", "Team", "Super"],
-	suffix: ["Team", "Racing", "Motorsport", "GP", "Automobiles", "Engineering", "Motors", "Grand Prix"],
+// const Team = {
+// 	prefix: ["Scuderia", "Team", "Super"],
+// 	suffix: ["Team", "Racing", "Motorsport", "GP", "Automobiles", "Engineering", "Motors", "Grand Prix"],
+// };
+
+// const Tire = {
+// 	prefix: [],
+// 	suffix: ["Tire", "Tires", "Tyre", "Tyres", "Rubber", "Racing Tyres", "Racing Tires"],
+// };
+
+const organizationNames = {
+	manufacturer: {
+		prefix: [],
+		suffix: ["Manufacturing", "Engineering"],
+	},
+
+	racingTeam: {
+		prefix: ["Scuderia", "Team", "Super"],
+		suffix: ["Team", "Racing", "Motorsport", "GP", "Automobiles", "Engineering", "Motors", "Grand Prix"],
+	},
+
+	circuitOwner: {
+		prefix: [],
+		suffix: ["Raceways"],
+	},
+
+	driverAcademy: {
+		prefix: [],
+		suffix: ["Academy"],
+	},
+
+	logisticsCompany: {
+		prefix: [],
+		suffix: ["Logistics"],
+	},
+
+	mediaCompany: {
+		prefix: [],
+		suffix: ["Media"],
+	},
+
+	championshipOrganizer: {
+		prefix: [],
+		suffix: ["Championship"],
+	},
 };
 
-const Tire = {
-	prefix: [],
-	suffix: ["Tire", "Tires", "Tyre", "Tyres", "Rubber", "Racing Tyres", "Racing Tires"],
-};
-
-export { FirstNames, LastNames, Team, Tire };
+export { FirstNames, LastNames, organizationNames };

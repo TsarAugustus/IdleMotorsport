@@ -7,7 +7,7 @@ import { simulate } from "./World/Time.js";
 
 export const initPeople = 100;
 export const initOrganizations = 0;
-export const yearsToSimulate = 100;
+export const yearsToSimulate = 1000;
 
 export const alivePeoplePerYear = 100;
 

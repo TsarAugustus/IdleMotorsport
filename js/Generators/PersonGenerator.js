@@ -14,9 +14,9 @@ export function generatePerson() {
 	thisPerson.alive = true;
 	thisPerson.retired = false;
 
-	Object.keys(thisPerson.skills).forEach(skill => {
+	Object.keys(thisPerson.skills).forEach((skill) => {
 		thisPerson.skills[skill] = Math.floor(Math.random() * 101);
 	});
-	
+
 	world.people.push(thisPerson);
 }

@@ -12,6 +12,7 @@ export default class Organization {
 	identities = [];
 	foundingYear;
 	active;
+	products = [];
 
 	// TODO: Add Owner/Employee History
 	ownerHistory = [];

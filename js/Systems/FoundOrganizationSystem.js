@@ -9,8 +9,13 @@ import { world } from "../World/World.js";
 
 export function organizationTick() {
 	// Random organization founding
-	if (Math.random() > 0.5) {
-		const randomPerson = world.people[Math.floor(Math.random() * world.people.length)];
+	if (Math.random() > 0.3) {
+		// Find alive, and non-retired people
+		const alivePeople = world.people.filter((person) => person.alive);
+		const aliveNotRetiredPeople = alivePeople.filter((person) => person.retired === false);
+
+		// Random person from list to try and found an organization
+		const randomPerson = aliveNotRetiredPeople[Math.floor(Math.random() * aliveNotRetiredPeople.length)];
 
 		if (!randomPerson) return;
 
@@ -57,10 +62,17 @@ function defineOrganizationType(person) {
 
 	const organizationScores = {};
 
-	for (const [organizationType, groups] of Object.entries(organizationCategories)) {
-		organizationScores[organizationType] = groups.groups.reduce((total, group) => {
-			return total + (groupScores[group] || 0);
-		}, 0);
+	// for (const [organizationType, groups] of Object.entries(organizationCategories)) {
+	// 	organizationScores[organizationType] = groups.groups.reduce((total, group) => {
+	// 		return total + (groupScores[group] || 0);
+	// 	}, 0);
+	// }
+
+	for (const [organizationType, data] of Object.entries(organizationCategories)) {
+		organizationScores[organizationType] =
+			data.groups.reduce((total, group) => {
+				return total + (groupScores[group] || 0);
+			}, 0) / data.groups.length;
 	}
 
 	const bestFit = Object.entries(organizationScores).sort((a, b) => b[1] - a[1])[0];

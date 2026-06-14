@@ -15,6 +15,7 @@ import { attemptOrganizationFounding } from "../Systems/FoundOrganizationSystem.
 import { alivePeoplePerYear } from "../init.js";
 import { populateWorld } from "../Systems/PopulationSystem.js";
 import { organizationTick } from "../Systems/FoundOrganizationSystem.js";
+import { productTick } from "../Systems/ProductCreationSystem.js";
 
 export function simulate(initPeople, initOrganizations, yearsToSimulate, alivePeoplePerYear) {
 	// Sample Generation
@@ -71,4 +72,5 @@ function newYearTick() {
 	organizationTick();
 	organizationHireTick();
 	discoveryTick();
+	productTick();
 }
