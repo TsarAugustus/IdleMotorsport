@@ -8,7 +8,7 @@ export function generateProduct(organization, product) {
 	thisProduct.id = world.products.length + 1;
 
 	thisProduct.owner = organization;
-	thisProduct.type = productTypes[organization.type][product];
+	thisProduct.type = product;
 
 	const organizationProductTypesTotal = organization.products.filter((product) => product.type === thisProduct.type).length;
 
