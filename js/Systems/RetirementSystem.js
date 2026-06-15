@@ -1,13 +1,16 @@
+import { addHistory } from "./HistorySystem.js";
+
+import { newOrganizationOwner } from "./NewOwnerSystem.js";
+
 export function handleRetirement(person) {
-	// Capture career history BEFORE clearing anything
-	const previousOrganizationIds = person.employedOrganizations.map((organization) => organization.id);
-
 	// Remove employment
-	person.employedOrganizations.forEach((organization) => {
-		organization.employees = organization.employees.filter((employee) => employee.id !== person.id);
-	});
+	if (person.employedOrganizations.length > 0) {
+		person.employedOrganizations.forEach((organization) => {
+			organization.employees = organization.employees.filter((employee) => employee.id !== person.id);
+		});
 
-	person.employedOrganizations = [];
+		person.employedOrganizations = [];
+	}
 
 	// Transfer ownership
 	if (person.ownedOrganizations.length > 0) {
@@ -21,19 +24,24 @@ export function handleRetirement(person) {
 			if (newOwner) {
 				newOwner.ownedOrganizations.push(organization);
 
-				addHistory("organizationTransfer", {
+				const data = {
 					personId: person.id,
 					organizationId: organization.id,
-				});
+				};
+
+				addHistory("organizationTransfer", data);
 			}
 		});
 
-		person.ownedOrganizations = [];
-	}
+		const previousOrganizationId = person.ownedOrganizations.map((org) => org.id);
 
-	// Retirement event ALWAYS happens
-	addHistory("personRetired", {
-		personId: person.id,
-		organizationId: previousOrganizationIds,
-	});
+		person.ownedOrganizations = [];
+
+		const data = {
+			personId: person.id,
+			organizationId: previousOrganizationId,
+		};
+
+		addHistory("personRetired", data);
+	}
 }
