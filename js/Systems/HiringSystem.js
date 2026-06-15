@@ -38,16 +38,26 @@ function organizationHire(organization, person) {
 
 		oldOrganization.employees = oldOrganization.employees.filter((employee) => employee.id !== person.id);
 
-		addHistory(
-			`${person.firstName} ${person.lastName} left ${oldOrganization.name} in year ${world.day} / ${world.month} / ${world.year}.`,
-		);
+		const data = {
+			personId: person.id,
+			organizationId: oldOrganization.id,
+		};
+
+		addHistory("personLeaving", data);
 	}
 
 	organization.employees.push(person);
 
 	person.employedOrganizations = [organization];
 
-	addHistory(
-		`${person.firstName} ${person.lastName} was hired by ${organization.name} in year ${world.day} / ${world.month} / ${world.year}.`,
-	);
+	// addHistory(
+	// 	`${person.firstName} ${person.lastName} was hired by ${organization.name} in year ${world.day} / ${world.month} / ${world.year}.`,
+	// );
+
+	const data = {
+		personId: person.id,
+		organizationId: organization.id,
+	};
+
+	addHistory("personHired", data);
 }

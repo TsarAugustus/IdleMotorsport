@@ -3,7 +3,6 @@ import { addHistory } from "./HistorySystem.js";
 
 import { skillGroups } from "../Data/SkillGroups.js";
 import { organizationCategories } from "../Data/OrganizationTypes.js";
-import { organizationIdentities } from "../Data/OrganizationIdentityDatabase.js";
 
 import { world } from "../World/World.js";
 
@@ -40,7 +39,12 @@ export function attemptOrganizationFounding(person) {
 
 		const newOrganization = generateOrganization(person, moneyInvested, organizationType, organizationIdentities);
 
-		addHistory(`${person.firstName} ${person.lastName} founded: ${newOrganization.name}`);
+		const data = {
+			personId: person.id,
+			organizationId: newOrganization.id,
+		};
+
+		addHistory("organizationFounded", data);
 	}
 }
 

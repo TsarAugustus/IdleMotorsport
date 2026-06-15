@@ -3,21 +3,16 @@ import { world } from "./World.js";
 import { generatePerson } from "../Generators/PersonGenerator.js";
 import { generateOrganization } from "../Generators/OrganizationGenerator.js";
 
-import { initiateHireFilter, organizationHireTick } from "../Systems/HiringSystem.js";
-import { addHistory } from "../Systems/HistorySystem.js";
-import { attemptDiscoveries, discoveryTick } from "../Systems/DiscoverySystem.js";
-import { attemptTechnologyAdoption } from "../Systems/AdoptionSystem.js";
+import { organizationHireTick } from "../Systems/HiringSystem.js";
+import { discoveryTick } from "../Systems/DiscoverySystem.js";
 import { handleRetirement } from "../Systems/RetirementSystem.js";
 import { handleDeath } from "../Systems/DeathSystem.js";
 
-import { technologies } from "../Data/TechnologyDatabase.js";
-import { attemptOrganizationFounding } from "../Systems/FoundOrganizationSystem.js";
-import { alivePeoplePerYear } from "../init.js";
 import { populateWorld } from "../Systems/PopulationSystem.js";
 import { organizationTick } from "../Systems/FoundOrganizationSystem.js";
 import { productTick } from "../Systems/ProductCreationSystem.js";
 
-export function simulate(initPeople, initOrganizations, yearsToSimulate, alivePeoplePerYear) {
+export function simulate(initPeople, initOrganizations, yearsToSimulate) {
 	// Sample Generation
 	for (let i = 0; i < initPeople; i++) generatePerson();
 	for (let i = 0; i < initOrganizations; i++) generateOrganization();

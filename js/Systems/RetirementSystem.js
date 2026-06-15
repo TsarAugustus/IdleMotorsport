@@ -1,38 +1,19 @@
-import { addHistory } from "./HistorySystem.js";
-
-import { newOrganizationOwner } from "./NewOwnerSystem.js";
-
 export function handleRetirement(person) {
+	// Capture career history BEFORE clearing anything
+	const previousOrganizationIds = person.employedOrganizations.map((organization) => organization.id);
 
 	// Remove employment
-	if (person.employedOrganizations.length > 0) {
+	person.employedOrganizations.forEach((organization) => {
+		organization.employees = organization.employees.filter((employee) => employee.id !== person.id);
+	});
 
-		const organizationNames = person.employedOrganizations
-			.map(org => org.name);
-
-		person.employedOrganizations.forEach(organization => {
-			organization.employees = organization.employees.filter(
-				employee => employee.id !== person.id
-			);
-		});
-
-		person.employedOrganizations = [];
-
-		addHistory(
-			`${person.firstName} ${person.lastName} has retired from ${organizationNames.join(", ")}`
-		);
-	}
+	person.employedOrganizations = [];
 
 	// Transfer ownership
 	if (person.ownedOrganizations.length > 0) {
-
 		const previousOrganizations = [...person.ownedOrganizations];
 
-		const organizationNames = previousOrganizations
-			.map(org => org.name);
-
-		previousOrganizations.forEach(organization => {
-
+		previousOrganizations.forEach((organization) => {
 			const newOwner = newOrganizationOwner(organization);
 
 			organization.owner = newOwner;
@@ -40,16 +21,19 @@ export function handleRetirement(person) {
 			if (newOwner) {
 				newOwner.ownedOrganizations.push(organization);
 
-				addHistory(
-					`${newOwner.firstName} ${newOwner.lastName} assumed ownership of ${organization.name}`
-				);
+				addHistory("organizationTransfer", {
+					personId: person.id,
+					organizationId: organization.id,
+				});
 			}
 		});
 
 		person.ownedOrganizations = [];
-
-		addHistory(
-			`${person.firstName} ${person.lastName} has retired, giving up ownership of ${organizationNames.join(", ")}`
-		);
 	}
+
+	// Retirement event ALWAYS happens
+	addHistory("personRetired", {
+		personId: person.id,
+		organizationId: previousOrganizationIds,
+	});
 }

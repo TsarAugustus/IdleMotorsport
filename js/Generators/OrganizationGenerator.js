@@ -1,6 +1,6 @@
 import { world } from "../World/World.js";
 
-import { LastNames, organizationNames } from "../Data/Names.js";
+import { organizationNames } from "../Data/Names.js";
 
 import Organization from "../Models/Organization.js";
 

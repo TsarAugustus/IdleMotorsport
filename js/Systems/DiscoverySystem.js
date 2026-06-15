@@ -11,33 +11,51 @@ export function discoveryTick() {
 	if (world.organizations.length > 0 && world.people.length > 0) {
 		const thisTechnology = Object.values(technologies)[Math.floor(Math.random() * Object.values(technologies).length)];
 
-		attemptDiscoveries();
-		attemptTechnologyAdoption(world.organizations[Math.floor(Math.random() * world.organizations.length)], thisTechnology);
+		const randomOrganzation = world.organizations[Math.floor(Math.random() * world.organizations.length)];
+
+		const alivePeople = world.people.filter((person) => person.alive && person.retired === false);
+		const randomPerson = alivePeople[Math.floor(Math.random() * alivePeople.length)];
+
+		attemptDiscoveries(randomPerson);
+		attemptTechnologyAdoption(randomOrganzation, thisTechnology);
 	}
 }
 
-export function attemptDiscoveries() {
-	world.people.forEach((person) => {
-		Object.values(technologies).forEach((tech) => {
-			if (tech.discovered) return;
+export function attemptDiscoveries(person) {
+	Object.values(technologies).forEach((tech) => {
+		if (tech.discovered) return;
 
-			const influenceBonus = getInfluenceBonus(tech.id);
+		const influenceBonus = getInfluenceBonus(tech.id);
+		const discoveryChance = person.skills.aerodynamics + influenceBonus - tech.difficulty;
 
-			const discoveryChance = person.skills.aerodynamics + influenceBonus - tech.difficulty;
+		const roll = Math.random() * 100;
 
-			const roll = Math.random() * 100;
+		if (roll < discoveryChance) {
+			tech.discovered = true;
+			tech.discoveredBy = person.id;
+			tech.discoveredYear = world.year;
 
-			if (roll < discoveryChance) {
-				tech.discovered = true;
+			const thisOrganization = decideOrganizationDiscoveryCredit(person, tech);
 
-				tech.discoveredBy = person.id;
+			const data = {
+				personId: person.id,
+				organizationId: thisOrganization ? thisOrganization.id : null,
+				technologyId: tech.id,
+			};
 
-				tech.discoveredYear = world.year;
-
-				addHistory(`${person.firstName} ${person.lastName} discovered ${tech.name} in year ${world.year}.`);
-			}
-		});
+			addHistory("technologyDiscovered", data);
+		}
 	});
+}
+
+function decideOrganizationDiscoveryCredit(person) {
+	if (!person) return;
+
+	if (person.employedOrganizations.length === 0) return;
+
+	const topPersonOrganization = person.employedOrganizations.sort()[0];
+
+	return topPersonOrganization;
 }
 
 function getInfluenceBonus(technologyId) {

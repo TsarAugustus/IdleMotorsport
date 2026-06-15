@@ -14,7 +14,12 @@ export function attemptProductCreation(organization) {
 	organization.products.push(thisProduct);
 	world.products.push(thisProduct);
 
-	addHistory(`${organization.name} created product: ${thisProduct.name}`);
+	const data = {
+		organizationId: organization.id,
+		productId: thisProduct.id,
+	};
+
+	addHistory("productCreation", data);
 }
 
 function defineProductTypes(organiation) {

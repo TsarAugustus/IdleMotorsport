@@ -3,7 +3,11 @@ import { newOrganizationOwner } from "./NewOwnerSystem.js";
 import { addHistory } from "./HistorySystem.js";
 
 export function handleDeath(person) {
-	addHistory(`${person.firstName} ${person.lastName} has died at the age of ${person.age}`);
+	const data = {
+		personId: person.id,
+	};
+
+	addHistory("death", data);
 
 	// Remove employment
 	if (person.employedOrganizations.length > 0) {
@@ -25,7 +29,12 @@ export function handleDeath(person) {
 
 			if (newOwner) {
 				newOwner.ownedOrganizations.push(organization);
-				addHistory(`${newOwner.firstName} ${newOwner.lastName} inherited ownership of ${organization.name}`);
+
+				const data = {
+					personId: person.id,
+				};
+
+				addHistory("organizationTransfer", data);
 			}
 		});
 
