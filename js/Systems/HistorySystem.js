@@ -16,7 +16,7 @@ export function addHistory(type, data) {
 
 	world.history.push(thisHistory);
 
-	console.log(translateHistoryEvent(thisHistory));
+	// console.log(translateHistoryEvent(thisHistory));
 }
 
 function translateHistoryEvent(event) {

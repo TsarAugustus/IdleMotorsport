@@ -11,6 +11,7 @@ import { handleDeath } from "../Systems/DeathSystem.js";
 import { populateWorld } from "../Systems/PopulationSystem.js";
 import { organizationTick } from "../Systems/FoundOrganizationSystem.js";
 import { productTick } from "../Systems/ProductCreationSystem.js";
+import revenueTick from "../Systems/RevenueSystem.js";
 
 export function simulate(initPeople, initOrganizations, yearsToSimulate) {
 	// Sample Generation
@@ -68,4 +69,5 @@ function newYearTick() {
 	organizationHireTick();
 	discoveryTick();
 	productTick();
+	revenueTick();
 }
