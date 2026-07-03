@@ -1,8 +1,5 @@
 import { world } from "./World.js";
 
-import { generatePerson } from "../Generators/PersonGenerator.js";
-import { generateOrganization } from "../Generators/OrganizationGenerator.js";
-
 import { organizationHireTick } from "../Systems/HiringSystem.js";
 import { discoveryTick } from "../Systems/DiscoverySystem.js";
 import { handleRetirement } from "../Systems/RetirementSystem.js";
@@ -12,12 +9,9 @@ import { populateWorld } from "../Systems/PopulationSystem.js";
 import { organizationTick } from "../Systems/FoundOrganizationSystem.js";
 import { productTick } from "../Systems/ProductCreationSystem.js";
 import revenueTick from "../Systems/RevenueSystem.js";
+import playerTick from "../Systems/PlayerSystem.js";
 
 export function simulate(initPeople, initOrganizations, yearsToSimulate) {
-	// Sample Generation
-	for (let i = 0; i < initPeople; i++) generatePerson();
-	for (let i = 0; i < initOrganizations; i++) generateOrganization();
-
 	const daysInYear = world.daysPerMonth * world.monthsPerYear;
 
 	for (let i = 0; i < yearsToSimulate * daysInYear; i++) {
@@ -70,4 +64,6 @@ function newYearTick() {
 	discoveryTick();
 	productTick();
 	revenueTick();
+
+	playerTick();
 }

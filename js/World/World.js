@@ -1,4 +1,6 @@
 export const world = {
+	player: undefined,
+
 	day: 1,
 	month: 1,
 	year: 1,
